@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 import '../widgets/transaction_list.dart';
+import '../widgets/chart_overview.dart';
+import '../mock.dart';
 
 class OverviewScreen extends StatelessWidget {
   static const routeName = '/overview';
@@ -17,11 +19,9 @@ class OverviewScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Container(
-              child: Text('Chart widget'),
-              height: 120,
-            ),
-            SizedBox(
+            // TODO: Set transactions of the current month
+            ChartOverview(transactionsMockSorted),
+            const SizedBox(
               height: 20,
             ),
             const Text(
