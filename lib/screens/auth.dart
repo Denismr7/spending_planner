@@ -25,29 +25,31 @@ class _AuthScreenState extends State<AuthScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 70),
-      width: double.infinity,
-      child: Column(
-        children: [
-          Container(
-            child: Text(
-              isLogin ? 'Log in' : 'Sign Up',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 30,
-                color: Theme.of(context).primaryColor,
-                fontWeight: FontWeight.bold,
+        body: SingleChildScrollView(
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 70),
+        width: double.infinity,
+        child: Column(
+          children: [
+            Container(
+              child: Text(
+                isLogin ? 'Log in' : 'Sign Up',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 30,
+                  color: Theme.of(context).primaryColor,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
-          ),
-          const SizedBox(height: 30),
-          AuthForm(
-            isLogin: isLogin,
-            handleSave: _handleSave,
-            handleToggleLogin: _toggleLogin,
-          )
-        ],
+            const SizedBox(height: 30),
+            AuthForm(
+              isLogin: isLogin,
+              handleSave: _handleSave,
+              handleToggleLogin: _toggleLogin,
+            )
+          ],
+        ),
       ),
     ));
   }

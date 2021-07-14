@@ -19,7 +19,7 @@ class RoundedButton extends StatelessWidget {
       height: 55,
       child: type == RoundedButtons.Elevated
           ? ElevatedButton(
-              onPressed: () {},
+              onPressed: onPressed,
               child: Text(buttonText),
               style: ElevatedButton.styleFrom(
                 shape: RoundedRectangleBorder(
