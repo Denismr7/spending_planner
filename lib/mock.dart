@@ -74,6 +74,15 @@ var transactionsMock = [
     amount: 15.99,
     description: 'Netflix',
   ),
+  Transaction(
+    id: "9",
+    userId: "1",
+    date: DateTime.now().subtract(Duration(days: 30)),
+    categoryId: "1",
+    categoryType: CategoryType.Incomes,
+    amount: 1000,
+    description: 'June Salary',
+  ),
 ]..sort((a, b) => b.date.compareTo(a.date));
 
 var transactionsMockSorted = transactionsMock;

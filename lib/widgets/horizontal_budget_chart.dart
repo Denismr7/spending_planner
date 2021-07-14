@@ -28,7 +28,6 @@ class HorizontalBudgetChart extends StatelessWidget {
           ),
         ),
         FractionallySizedBox(
-          // TODO: Set widthFactor dynamically depending on remaining budget
           widthFactor: spentPercentage < 1 ? spentPercentage : 1,
           child: Container(
               height: barChartHeight,

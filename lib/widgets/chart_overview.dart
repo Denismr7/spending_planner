@@ -19,7 +19,6 @@ class ChartOverview extends StatelessWidget {
       }
     }
 
-    print(totalSpending);
     return totalSpending;
   }
 
