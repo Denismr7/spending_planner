@@ -6,7 +6,7 @@ class RoundedFormField extends StatefulWidget {
   const RoundedFormField({
     Key? key,
     required this.validator,
-    required this.onSave,
+    required this.onChanged,
     required this.prefixIcon,
     required this.field,
     required this.labelText,
@@ -16,7 +16,7 @@ class RoundedFormField extends StatefulWidget {
   final Icon prefixIcon;
   final AuthField field;
   final Function(AuthField field, String? value) validator;
-  final Function(AuthField field, String? value) onSave;
+  final Function(AuthField field, String? value) onChanged;
 
   @override
   _RoundedFormFieldState createState() => _RoundedFormFieldState();
@@ -76,7 +76,7 @@ class _RoundedFormFieldState extends State<RoundedFormField> {
         ),
       ),
       validator: (value) => widget.validator(widget.field, value),
-      onSaved: (value) => widget.onSave(widget.field, value!),
+      onChanged: (value) => widget.onChanged(widget.field, value),
     );
   }
 }

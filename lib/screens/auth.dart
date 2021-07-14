@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 import '../widgets/auth_form.dart';
+import '../models/auth_field.dart';
 
 class AuthScreen extends StatefulWidget {
   const AuthScreen();
@@ -12,8 +14,82 @@ class AuthScreen extends StatefulWidget {
 class _AuthScreenState extends State<AuthScreen> {
   var isLogin = true;
 
-  void _handleSave() {
-    print('Handle Save!');
+  Future<void> _handleSave(Map<AuthField, String> form) async {
+    // Guard
+    if (form.isEmpty) return;
+
+    if (isLogin) {
+      await _tryLogin(
+        form[AuthField.Email]!,
+        form[AuthField.Password]!,
+      );
+    } else {
+      await _tryCreateAccount(
+        form[AuthField.Email]!,
+        form[AuthField.Password]!,
+      );
+    }
+  }
+
+  Future<UserCredential?> _tryCreateAccount(
+      String email, String password) async {
+    try {
+      var authInstance = FirebaseAuth.instance;
+      UserCredential userCredential =
+          await authInstance.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+      return userCredential;
+    } on FirebaseAuthException catch (e) {
+      var message = "An error ocurred";
+      if (e.code == 'weak-password') {
+        message = 'The password provided is too weak.';
+      } else if (e.code == 'email-already-in-use') {
+        message = 'The account already exists for that email.';
+      }
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(message),
+        ),
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(e.toString()),
+        ),
+      );
+    }
+  }
+
+  Future<UserCredential?> _tryLogin(String email, String password) async {
+    try {
+      var authInstance = FirebaseAuth.instance;
+      UserCredential userCredential =
+          await authInstance.signInWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+      return userCredential;
+    } on FirebaseAuthException catch (e) {
+      var message = "An error ocurred";
+      if (e.code == 'user-not-found') {
+        message = 'Email not found.';
+      } else if (e.code == 'wrong-password') {
+        message = 'Wrong password.';
+      }
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(message),
+        ),
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(e.toString()),
+        ),
+      );
+    }
   }
 
   void _toggleLogin() {

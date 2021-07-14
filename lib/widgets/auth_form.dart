@@ -7,7 +7,7 @@ import '../models/auth_field.dart';
 
 class AuthForm extends StatefulWidget {
   final bool isLogin;
-  final Function handleSave;
+  final Function(Map<AuthField, String> form) handleSave;
   final VoidCallback handleToggleLogin;
   const AuthForm({
     required this.isLogin,
@@ -30,9 +30,11 @@ class _AuthFormState extends State<AuthForm> {
   }
 
   String? _validateFormField(AuthField formField, String? value) {
+    // Do not validate repeat password field if the user is logging in
     if (widget.isLogin && formField == AuthField.RepeatPassword) {
       return null;
     }
+
     if (value == null || value.isEmpty) {
       return 'This field is required';
     }
@@ -41,9 +43,9 @@ class _AuthFormState extends State<AuthForm> {
       case AuthField.Email:
         return _validateEmail(value);
       case AuthField.Password:
-        return _validatePassword(value);
+        return _validatePassword(value, false);
       case AuthField.RepeatPassword:
-        return _validatePassword(value);
+        return _validatePassword(value, true);
     }
   }
 
@@ -55,9 +57,13 @@ class _AuthFormState extends State<AuthForm> {
     return null;
   }
 
-  String? _validatePassword(String value) {
+  String? _validatePassword(String value, bool repeated) {
     if (value.length < 6) {
       return 'Password is too short!';
+    }
+
+    if (repeated && value != _authData[AuthField.Password]) {
+      return 'Both passwords must be equal';
     }
 
     return null;
@@ -68,11 +74,12 @@ class _AuthFormState extends State<AuthForm> {
   }
 
   void _validateAndSubmitForm() {
-    print('Validating...');
+    // Validate and save
     if (!_formKey.currentState!.validate()) return;
-
     _formKey.currentState!.save();
-    print('Email: ${_authData[AuthField.Email]}');
+
+    // Send to parent widget
+    widget.handleSave(_authData);
   }
 
   @override
@@ -85,7 +92,7 @@ class _AuthFormState extends State<AuthForm> {
             children: [
               RoundedFormField(
                 validator: _validateFormField,
-                onSave: _saveField,
+                onChanged: _saveField,
                 prefixIcon: Icon(Icons.person),
                 field: AuthField.Email,
                 labelText: 'Email',
@@ -94,7 +101,7 @@ class _AuthFormState extends State<AuthForm> {
               _buildSizedBox(),
               RoundedFormField(
                 validator: _validateFormField,
-                onSave: _saveField,
+                onChanged: _saveField,
                 prefixIcon: Icon(Icons.lock),
                 field: AuthField.Password,
                 labelText: 'Password',
@@ -105,7 +112,7 @@ class _AuthFormState extends State<AuthForm> {
                     _buildSizedBox(),
                     RoundedFormField(
                       validator: _validateFormField,
-                      onSave: _saveField,
+                      onChanged: _saveField,
                       prefixIcon: Icon(Icons.lock),
                       field: AuthField.RepeatPassword,
                       labelText: 'Repeat password',
