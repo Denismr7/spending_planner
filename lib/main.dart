@@ -1,12 +1,16 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:provider/provider.dart';
 
 import 'screens/overview.dart';
 import 'screens/loading.dart';
 import 'screens/error.dart';
 import 'screens/auth.dart';
+import 'providers/user.dart';
+import 'models/user.dart' as model;
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -37,7 +41,31 @@ class _MyAppState extends State<MyApp> {
           }
 
           if (snapshot.hasData) {
-            return OverviewScreen();
+            // Returns a FutureBuilder in order to save the user data into provider
+            return FutureBuilder(
+                future: FirebaseFirestore.instance
+                    .collection('users')
+                    .doc(
+                      (snapshot.data as User).uid,
+                    )
+                    .get(),
+                builder: (ctx, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return LoadingScreen();
+                  } else if (snapshot.hasError) {
+                    return ErrorScreen(snapshot.error.toString());
+                  }
+                  final response =
+                      snapshot.data as DocumentSnapshot<Map<String, dynamic>>;
+                  Provider.of<UserProvider>(ctx, listen: false)
+                      .setUser(response.id, response.data()!['email'], "", [
+                    model.UserSettings(
+                        model.Setting.Budget, response.data()!['budget']),
+                    model.UserSettings(
+                        model.Setting.Currency, response.data()!['currency']),
+                  ]);
+                  return OverviewScreen();
+                });
           }
 
           return AuthScreen();
@@ -60,7 +88,10 @@ class _MyAppState extends State<MyApp> {
               primarySwatch: Colors.green,
               accentColor: Colors.lightGreen,
             ),
-            home: _buildHome(snapshot),
+            home: ChangeNotifierProvider(
+              create: (ctx) => UserProvider(),
+              child: _buildHome(snapshot),
+            ),
             routes: {
               OverviewScreen.routeName: (ctx) => OverviewScreen(),
             },

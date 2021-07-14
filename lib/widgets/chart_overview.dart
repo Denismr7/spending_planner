@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:spending_planner/models/category.dart';
-import 'package:spending_planner/models/transaction.dart';
+import 'package:provider/provider.dart';
 
+import '../models/category.dart';
+import '../models/transaction.dart';
+import '../providers/user.dart';
 import 'horizontal_budget_chart.dart';
+import '../models/user.dart';
 
 class ChartOverview extends StatelessWidget {
   final List<Transaction> monthTransactions;
@@ -25,9 +28,11 @@ class ChartOverview extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final totalSpending = getTotalSpending(monthTransactions);
-    // TODO: Get max spending amount and currency from user settings
-    final limit = 250;
-    final spentPercentage = totalSpending / limit;
+    final budget = Provider.of<UserProvider>(context, listen: false)
+        .getSettingValue(Setting.Budget);
+    final currency = Provider.of<UserProvider>(context, listen: false)
+        .getSettingValue(Setting.Currency);
+    final spentPercentage = totalSpending / budget;
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 10),
       padding: const EdgeInsets.all(8.0),
@@ -50,7 +55,7 @@ class ChartOverview extends StatelessWidget {
             width: double.infinity,
             padding: const EdgeInsets.symmetric(vertical: 5),
             child: Text(
-              '$limit \$',
+              '$budget $currency',
               textAlign: TextAlign.right,
             ),
           ),

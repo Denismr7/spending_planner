@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
-import 'package:spending_planner/models/category.dart';
+import '../models/category.dart';
+import '../models/user.dart';
+import '../providers/user.dart';
 
 class TransactionItem extends StatelessWidget {
   final String description;
@@ -23,6 +26,8 @@ class TransactionItem extends StatelessWidget {
   Widget build(BuildContext context) {
     var isIncome = categoryType == CategoryType.Incomes ? true : false;
     var symbol = isIncome ? "+" : "-";
+    final currency =
+        Provider.of<UserProvider>(context).getSettingValue(Setting.Currency);
     return ListTile(
       leading: CircleAvatar(
         backgroundColor: isIncome ? Colors.green[500] : expenseColor,
@@ -33,12 +38,11 @@ class TransactionItem extends StatelessWidget {
       ),
       title: Text(
         description,
-        style: TextStyle(fontWeight: FontWeight.bold),
+        style: const TextStyle(fontWeight: FontWeight.bold),
       ),
       subtitle: Text(DateFormat.MMMMEEEEd().format(date)),
       trailing: Text(
-        // TODO: Replace dollar symbol with user setting value for currency
-        '$symbol ${amount.toStringAsFixed(2)} \$',
+        '$symbol ${amount.toStringAsFixed(2)} $currency',
         style: TextStyle(
           color: isIncome ? Colors.green[800] : expenseColor,
         ),

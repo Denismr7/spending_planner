@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import '../widgets/transaction_list.dart';
@@ -32,6 +33,7 @@ class OverviewScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            // TODO: Get user transactions
             ChartOverview(filterByCurrentMonth(transactionsMockSorted)),
             const SizedBox(
               height: 20,
