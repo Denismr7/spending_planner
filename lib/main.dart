@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 import 'screens/overview.dart';
 import 'screens/loading.dart';
 import 'screens/error.dart';
+import 'screens/auth.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -23,7 +25,24 @@ class _MyAppState extends State<MyApp> {
     }
 
     if (snapshot.connectionState == ConnectionState.done) {
-      return OverviewScreen();
+      return StreamBuilder(
+        stream: FirebaseAuth.instance.authStateChanges(),
+        builder: (ctx, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return LoadingScreen();
+          }
+
+          if (snapshot.hasError) {
+            return ErrorScreen(snapshot.error.toString());
+          }
+
+          if (snapshot.hasData) {
+            return OverviewScreen();
+          }
+
+          return AuthScreen();
+        },
+      );
     }
 
     return LoadingScreen();
