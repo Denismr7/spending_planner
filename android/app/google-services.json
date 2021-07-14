@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "305488928377",
+    "project_id": "spending-planner",
+    "storage_bucket": "spending-planner.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:305488928377:android:98ea854f402d61e3987ea8",
+        "android_client_info": {
+          "package_name": "com.example.spending_planner"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "305488928377-raf9q7jgke1d3cdk61iiac82kjqaeuj5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBkU9diSPt6dVFsATPb2Q3ihqFuN4-YFW0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "305488928377-raf9q7jgke1d3cdk61iiac82kjqaeuj5.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
