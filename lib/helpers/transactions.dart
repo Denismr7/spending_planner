@@ -80,4 +80,14 @@ class TransactionsHelper {
       throw e;
     }
   }
+
+  static Future<void> deleteTransaction(String id) async {
+    final firestore = FirebaseFirestore.instance;
+    try {
+      await firestore.collection('transactions').doc(id).delete();
+    } catch (e) {
+      print('SPLAN: Exception: ' + e.toString());
+      throw e;
+    }
+  }
 }

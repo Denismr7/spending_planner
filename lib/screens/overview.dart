@@ -32,9 +32,13 @@ class _OverviewScreenState extends State<OverviewScreen> {
     return currentMonthTransactions;
   }
 
-  Future<List<Transaction>> _getTransactions(String userId, int limit) async {
+  Future<List<Transaction>> _getTransactions(String userId, int limit,
+      [bool update = false]) async {
     final data = await TransactionsHelper.searchUserTransactions(userId, limit);
     _fetchedTransactions = data;
+    if (update) {
+      setState(() {});
+    }
     return data;
   }
 
@@ -83,7 +87,10 @@ class _OverviewScreenState extends State<OverviewScreen> {
                     'Recent transactions',
                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.w300),
                   ),
-                  TransactionList(_fetchedTransactions)
+                  TransactionList(
+                    _fetchedTransactions,
+                    () => _getTransactions(user.currentUser!.uid, 30, true),
+                  )
                 ],
               );
             }),

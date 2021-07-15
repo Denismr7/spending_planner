@@ -4,9 +4,10 @@ import 'package:spending_planner/models/transaction.dart';
 import 'transaction_item.dart';
 
 class TransactionList extends StatelessWidget {
-  const TransactionList(this.transactions);
+  const TransactionList(this.transactions, this.onLongPressItem);
 
   final List<Transaction> transactions;
+  final VoidCallback onLongPressItem;
 
   @override
   Widget build(BuildContext context) {
@@ -21,6 +22,8 @@ class TransactionList extends StatelessWidget {
                 date: transactions[index].date,
                 categoryType: transactions[index].categoryType,
                 amount: transactions[index].amount,
+                id: transactions[index].id,
+                onLongPress: onLongPressItem,
               ),
               itemCount: transactions.length,
             ),
