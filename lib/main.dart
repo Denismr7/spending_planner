@@ -5,6 +5,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:provider/provider.dart';
 
+import 'screens/settings.dart';
 import 'screens/overview.dart';
 import 'screens/loading.dart';
 import 'screens/error.dart';
@@ -94,6 +95,7 @@ class _MyAppState extends State<MyApp> {
             ),
             routes: {
               OverviewScreen.routeName: (ctx) => OverviewScreen(),
+              SettingsScreen.routeName: (ctx) => SettingsScreen(),
             },
           );
         });
