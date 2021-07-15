@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import '../models/user.dart';
+import '../providers/user.dart';
 
 class HorizontalBudgetChart extends StatelessWidget {
   const HorizontalBudgetChart({
@@ -13,6 +17,8 @@ class HorizontalBudgetChart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final currency = Provider.of<UserProvider>(context, listen: false)
+        .getSettingValue(Setting.Currency);
     return Stack(
       children: [
         FractionallySizedBox(
@@ -44,7 +50,7 @@ class HorizontalBudgetChart extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          '${totalSpent.toStringAsFixed(2)} \$',
+                          '${totalSpent.toStringAsFixed(2)} $currency',
                           textAlign: TextAlign.center,
                         ),
                       ],

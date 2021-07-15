@@ -1,0 +1,1 @@
+enum RoundedButtons { Elevated, Outlined }
