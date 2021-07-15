@@ -33,14 +33,20 @@ class _DatepickerFieldState extends State<DatepickerField> {
     setState(() {
       _selectedDate = DateFormat.yMMMd().format(pickedDate);
     });
+    widget.onSelectedDate(pickedDate);
   }
 
   @override
-  Widget build(BuildContext context) {
+  void initState() {
+    super.initState();
     if (_selectedDate != null) {
       DateFormat format = DateFormat.yMMMd();
       widget.onSelectedDate(format.parse(_selectedDate!));
     }
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () => _showDatePicker(context),
       child: Container(

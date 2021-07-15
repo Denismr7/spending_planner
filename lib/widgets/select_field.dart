@@ -31,6 +31,12 @@ class _SelectFieldState extends State<SelectField> {
     return options;
   }
 
+  @override
+  void initState() {
+    super.initState();
+    widget.onChanged(widget.initialValue);
+  }
+
   void _onChangeValue(dynamic newValue) {
     final valueAsString = newValue.toString();
     setState(() {

@@ -58,7 +58,7 @@ class _AddTransactionState extends State<AddTransaction> {
 
     // Keyboard appears when editing select or datepicker
     if (fieldName == 'Category' || fieldName == 'Date') {
-      // FocusScope.of(context).requestFocus(FocusNode());
+      FocusScope.of(context).requestFocus(FocusNode());
     }
   }
 
