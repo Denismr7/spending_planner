@@ -7,6 +7,7 @@ import '../widgets/transaction_list.dart';
 import '../widgets/chart_overview.dart';
 import '../models/transaction.dart';
 import '../helpers/transactions.dart';
+import '../widgets/add_transaction.dart';
 
 class OverviewScreen extends StatefulWidget {
   static const routeName = '/overview';
@@ -17,6 +18,8 @@ class OverviewScreen extends StatefulWidget {
 }
 
 class _OverviewScreenState extends State<OverviewScreen> {
+  List<Transaction> _fetchedTransactions = [];
+
   List<Transaction> _filterByCurrentMonth(List<Transaction> transactions) {
     List<Transaction> currentMonthTransactions = [];
     var currentDate = DateTime.now();
@@ -30,7 +33,25 @@ class _OverviewScreenState extends State<OverviewScreen> {
   }
 
   Future<List<Transaction>> _getTransactions(String userId, int limit) async {
-    return await TransactionsHelper.searchUserTransactions(userId, limit);
+    final data = await TransactionsHelper.searchUserTransactions(userId, limit);
+    _fetchedTransactions = data;
+    return data;
+  }
+
+  void _showModalBottomSheet(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      builder: (ctx) {
+        return AddTransaction();
+      },
+    ).then((value) {
+      Transaction? newTransaction = value;
+      if (newTransaction == null) return;
+
+      setState(() {
+        _fetchedTransactions.add(newTransaction);
+      });
+    });
   }
 
   @override
@@ -50,11 +71,11 @@ class _OverviewScreenState extends State<OverviewScreen> {
               } else if (snap.hasError) {
                 return ErrorScreen(snap.error.toString());
               }
+
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  ChartOverview(
-                      _filterByCurrentMonth(snap.data as List<Transaction>)),
+                  ChartOverview(_filterByCurrentMonth(_fetchedTransactions)),
                   const SizedBox(
                     height: 20,
                   ),
@@ -62,14 +83,14 @@ class _OverviewScreenState extends State<OverviewScreen> {
                     'Recent transactions',
                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.w300),
                   ),
-                  TransactionList(snap.data as List<Transaction>)
+                  TransactionList(_fetchedTransactions)
                 ],
               );
             }),
       ),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
-        onPressed: () {},
+        onPressed: () => _showModalBottomSheet(context),
       ),
     );
   }
