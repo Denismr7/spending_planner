@@ -14,22 +14,21 @@ class SettingsScreen extends StatefulWidget {
 }
 
 class _SettingsScreenState extends State<SettingsScreen> {
-  Map<Setting, dynamic> _settings = {};
+  Map<Setting, dynamic> _editedSettings = {};
+  Map<Setting, dynamic> _userSettings = {};
   var _loading = false;
 
   void _onChange(Setting settingName, String? value) {
     if (value == null || value.isEmpty) {
       // If the settings key exists but the value has been cleared, remove map entry
-      if (_settings.containsKey(settingName)) {
+      if (_editedSettings.containsKey(settingName)) {
         setState(() {
-          _settings.remove(settingName);
+          _editedSettings.remove(settingName);
         });
       }
       return;
     }
-    setState(() {
-      _settings[settingName] = value;
-    });
+    _editedSettings[settingName] = value;
   }
 
   void _onSave() async {
@@ -37,16 +36,16 @@ class _SettingsScreenState extends State<SettingsScreen> {
       _loading = true;
     });
 
-    _settings.keys.forEach((key) {
-      var settingValue = _settings[key];
+    _editedSettings.keys.forEach((key) {
+      var settingValue = _editedSettings[key];
       if (settingValue == null) {
-        _settings.remove(key);
+        _editedSettings.remove(key);
       }
     });
 
     try {
       await Provider.of<UserProvider>(context, listen: false)
-          .updateSettingValue(_settings);
+          .updateSettingValue(_editedSettings);
       setState(() {
         _loading = false;
       });
@@ -67,12 +66,17 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    var userSettings =
+        Provider.of<UserProvider>(context, listen: false).userSettings;
+    userSettings.forEach((setting) {
+      _userSettings[setting.key] = setting.value;
+    });
     return Scaffold(
       appBar: AppBar(
         title: const Text('Settings'),
         actions: [
           IconButton(
-            onPressed: _settings.isEmpty || _loading ? null : _onSave,
+            onPressed: _editedSettings.isEmpty || _loading ? null : _onSave,
             icon: const Icon(
               Icons.save_rounded,
             ),
@@ -88,7 +92,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               label: 'Budget',
               icon: Icons.bar_chart,
               simpleInput: true,
-              initialValue: '300',
+              initialValue: _userSettings[Setting.Budget],
               inputType: TextInputType.number,
               onChanged: (val) {
                 _onChange(Setting.Budget, val);

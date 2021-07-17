@@ -23,11 +23,33 @@ class SettingOption extends StatefulWidget {
 
 class _SettingOptionState extends State<SettingOption> {
   var _controller = TextEditingController();
+  String? _errorMessage;
+
+  void _onChanged(String? value) {
+    if (value == null || value.isEmpty) {
+      setState(() {
+        _errorMessage = "Field required";
+      });
+      return;
+    }
+    if (_errorMessage != null) {
+      setState(() {
+        _errorMessage = null;
+      });
+    }
+    widget.onChanged(value);
+  }
 
   @override
   void initState() {
     super.initState();
     _controller.text = widget.initialValue;
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _controller.dispose();
   }
 
   @override
@@ -54,8 +76,11 @@ class _SettingOptionState extends State<SettingOption> {
                 width: 80,
                 child: TextField(
                   controller: _controller,
-                  onChanged: widget.onChanged,
+                  onChanged: _onChanged,
                   keyboardType: widget.inputType,
+                  decoration: InputDecoration(
+                    errorText: _errorMessage,
+                  ),
                 ),
               )
             : IconButton(

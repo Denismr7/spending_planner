@@ -9,6 +9,9 @@ class UserProvider extends ChangeNotifier {
 
   User? get user => _user;
 
+  List<UserSettings> get userSettings =>
+      _user?.settings == null ? [] : _user!.settings;
+
   static String enumToString(Setting enumKey) {
     return enumKey.toString().split(".")[1].toLowerCase();
   }
@@ -24,7 +27,6 @@ class UserProvider extends ChangeNotifier {
   }
 
   double getSettingValueAsDouble(Setting key) {
-    print(getSettingValue(key).toString());
     return double.parse(getSettingValue(key));
   }
 
@@ -46,10 +48,11 @@ class UserProvider extends ChangeNotifier {
         var settingIndex =
             _user?.settings.indexWhere((element) => element.key == key);
         if (settingIndex == null || settingIndex.isNaN) {
-          print('Setting $key not found');
+          print('SPLAN.UserProvider(): Setting $key not found');
           return;
         }
 
+        print('Updated setting with key $key, value ${newSettings[key]}');
         var newValue = newSettings[key];
         var updatedSetting = UserSettings(key, newValue);
         _user?.settings[settingIndex] = updatedSetting;
