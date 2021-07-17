@@ -19,8 +19,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
   var _loading = false;
 
   void _onChange(Setting settingName, String? value) {
+    // Set state when setting change is required because the Save button will be disabled if de map is empty
     if (value == null || value.isEmpty) {
-      // If the settings key exists but the value has been cleared, remove map entry
+      // If the settings key exists but the value has been cleared or it's invalid, remove map entry
       if (_editedSettings.containsKey(settingName)) {
         setState(() {
           _editedSettings.remove(settingName);
@@ -28,7 +29,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
       }
       return;
     }
-    _editedSettings[settingName] = value;
+    setState(() {
+      _editedSettings[settingName] = value;
+    });
   }
 
   void _onSave() async {
@@ -36,6 +39,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
       _loading = true;
     });
 
+    // Remove empty entries, if any
     _editedSettings.keys.forEach((key) {
       var settingValue = _editedSettings[key];
       if (settingValue == null) {
@@ -49,6 +53,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
       setState(() {
         _loading = false;
       });
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: const Text('Settings saved successfully')),
+      );
     } catch (e) {
       print(e);
       ScaffoldMessenger.of(context).showSnackBar(
@@ -90,16 +97,28 @@ class _SettingsScreenState extends State<SettingsScreen> {
           children: [
             SettingOption(
               label: 'Budget',
-              icon: Icons.bar_chart,
+              icon: Icons.warning_amber_rounded,
               simpleInput: true,
               initialValue: _userSettings[Setting.Budget],
               inputType: TextInputType.number,
+              setting: Setting.Budget,
               onChanged: (val) {
                 _onChange(Setting.Budget, val);
               },
             ),
             const SizedBox(
               height: 20,
+            ),
+            SettingOption(
+              label: 'Currency',
+              setting: Setting.Currency,
+              icon: Icons.attach_money_rounded,
+              simpleInput: true,
+              initialValue: _userSettings[Setting.Currency],
+              inputType: TextInputType.text,
+              onChanged: (val) {
+                _onChange(Setting.Currency, val);
+              },
             ),
           ],
         ),
