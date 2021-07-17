@@ -120,6 +120,17 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 _onChange(Setting.Currency, val);
               },
             ),
+            const SizedBox(
+              height: 20,
+            ),
+            SettingOption(
+              label: 'Categories',
+              icon: Icons.category_rounded,
+              simpleInput: false,
+              onChanged: (v) {},
+              initialValue: _userSettings[Setting.Categories],
+              setting: Setting.Categories,
+            )
           ],
         ),
       ),

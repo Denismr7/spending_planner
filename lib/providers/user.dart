@@ -12,10 +12,6 @@ class UserProvider extends ChangeNotifier {
   List<UserSettings> get userSettings =>
       _user?.settings == null ? [] : _user!.settings;
 
-  static String enumToString(Setting enumKey) {
-    return enumKey.toString().split(".")[1].toLowerCase();
-  }
-
   void setUser(
       String id, String email, String name, List<UserSettings> settings) {
     _user = User(id: id, login: email, name: name, settings: settings);
@@ -42,7 +38,7 @@ class UserProvider extends ChangeNotifier {
           .collection('users')
           .doc(user.currentUser!.uid)
           .update(newSettings.map((key, value) {
-        return MapEntry(enumToString(key), value);
+        return MapEntry(key.valueAsString(), value);
       }));
       newSettings.keys.forEach((key) {
         var settingIndex =

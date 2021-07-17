@@ -61,7 +61,7 @@ class TransactionsHelper {
         'amount': amount,
         'userId': userId,
         'categoryId': categoryId,
-        'categoryType': categoryType.toString().split(".")[1],
+        'categoryType': categoryType.valueAsString(),
         'date': Timestamp.fromDate(date),
         'description': description,
       });
