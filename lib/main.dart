@@ -83,20 +83,20 @@ class _MyAppState extends State<MyApp> {
     return FutureBuilder(
         future: _initialization,
         builder: (context, snapshot) {
-          return MaterialApp(
-            title: 'Spending Planner',
-            theme: ThemeData(
-              primarySwatch: Colors.green,
-              accentColor: Colors.lightGreen,
+          return ChangeNotifierProvider(
+            create: (ctx) => UserProvider(),
+            child: MaterialApp(
+              title: 'Spending Planner',
+              theme: ThemeData(
+                primarySwatch: Colors.green,
+                accentColor: Colors.deepPurple,
+              ),
+              home: _buildHome(snapshot),
+              routes: {
+                OverviewScreen.routeName: (ctx) => OverviewScreen(),
+                SettingsScreen.routeName: (ctx) => SettingsScreen()
+              },
             ),
-            home: ChangeNotifierProvider(
-              create: (ctx) => UserProvider(),
-              child: _buildHome(snapshot),
-            ),
-            routes: {
-              OverviewScreen.routeName: (ctx) => OverviewScreen(),
-              SettingsScreen.routeName: (ctx) => SettingsScreen(),
-            },
           );
         });
   }
