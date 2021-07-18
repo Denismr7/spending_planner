@@ -27,6 +27,13 @@ class Category {
     print('SPLAN.parseString() Invalid Category Type $value');
     throw Exception('Invalid Category Type $value');
   }
+
+  Map<String, dynamic> toJson() => {
+        'id': id,
+        'name': name,
+        'amount': amount,
+        'categoryType': categoryType.valueAsString(),
+      };
 }
 
 enum CategoryType { Incomes, Expenses }

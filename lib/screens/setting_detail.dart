@@ -21,15 +21,28 @@ class _SettingDetailScreenState extends State<SettingDetailScreen> {
   Widget _buildEditor() {
     switch (widget.setting) {
       case Setting.Categories:
-        return CategoriesEdit(_jsonData!);
+        return CategoriesEdit(
+          _jsonData!,
+          onChange: _onChangeCategories,
+        );
       default:
         return const Text('Invalid setting');
     }
   }
 
+  void _onChangeCategories(String newJson) {
+    _jsonData = newJson;
+  }
+
+  void _onSave() {
+    Provider.of<UserProvider>(context, listen: false)
+        .updateSettingValue({Setting.Categories: _jsonData});
+    Navigator.of(context).pop(_jsonData);
+  }
+
   String _getCategories() {
-    String categories =
-        Provider.of<UserProvider>(context).getSettingValue(Setting.Categories);
+    String categories = Provider.of<UserProvider>(context, listen: false)
+        .getSettingValue(Setting.Categories);
     return categories;
   }
 
@@ -49,9 +62,20 @@ class _SettingDetailScreenState extends State<SettingDetailScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.setting.valueAsString()),
+        title: Text(
+          widget.setting.valueAsString(),
+        ),
+        actions: [
+          IconButton(
+            onPressed: _onSave,
+            icon: const Icon(Icons.check),
+          ),
+        ],
       ),
-      body: _buildEditor(),
+      body: Padding(
+        padding: const EdgeInsets.all(10.0),
+        child: _buildEditor(),
+      ),
     );
   }
 }

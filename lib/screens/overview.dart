@@ -47,6 +47,7 @@ class _OverviewScreenState extends State<OverviewScreen> {
 
   void _showModalBottomSheet(BuildContext context) {
     showModalBottomSheet(
+      isScrollControlled: true,
       context: context,
       builder: (ctx) {
         return AddTransaction();

@@ -20,7 +20,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   var _loading = false;
 
   void _onChange(Setting settingName, String? value) {
-    // Set state when setting change is required because the Save button will be disabled if de map is empty
+    // Set state when setting change is required because the Save button will be disabled if the map is empty
     if (value == null || value.isEmpty) {
       // If the settings key exists but the value has been cleared or it's invalid, remove map entry
       if (_editedSettings.containsKey(settingName)) {
@@ -36,11 +36,15 @@ class _SettingsScreenState extends State<SettingsScreen> {
   }
 
   void _openSettingDetail(Setting setting) {
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (ctx) => SettingDetailScreen(setting: setting),
-      ),
-    );
+    Navigator.of(context)
+        .push(
+          MaterialPageRoute(
+            builder: (ctx) => SettingDetailScreen(setting: setting),
+          ),
+        )
+        .then(
+          (value) => _onChange(setting, value),
+        );
   }
 
   void _onSave() async {
@@ -136,7 +140,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
               label: 'Categories',
               icon: Icons.category_rounded,
               simpleInput: false,
-              onChanged: (v) {},
               initialValue: _userSettings[Setting.Categories],
               setting: Setting.Categories,
               onTapDetail: () => _openSettingDetail(Setting.Categories),

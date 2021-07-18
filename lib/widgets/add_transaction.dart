@@ -1,10 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:spending_planner/helpers/transactions.dart';
-import 'package:spending_planner/models/transaction.dart';
-import 'package:spending_planner/widgets/datepicker_field.dart';
 
+import '../helpers/transactions.dart';
+import 'datepicker_field.dart';
 import 'add_transaction_input.dart';
 import 'select_field.dart';
 import '../models/category.dart';
@@ -89,14 +87,17 @@ class _AddTransactionState extends State<AddTransaction> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: MediaQuery.of(context).size.height / 0.4,
+    return Padding(
+      padding: EdgeInsets.only(
+        bottom: MediaQuery.of(context).viewInsets.bottom / 2,
+      ),
       child: Form(
         key: _formKey,
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+          padding: const EdgeInsets.all(20),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.end,
+            mainAxisSize: MainAxisSize.min,
             children: [
               AddTransactionInput(
                 labelText: 'Description',

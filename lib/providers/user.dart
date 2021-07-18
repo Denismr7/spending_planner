@@ -34,12 +34,22 @@ class UserProvider extends ChangeNotifier {
         return;
       }
 
+      Map<String, Object> mappedSettings = {};
+      // Remove empty values
+      newSettings.keys.forEach((key) {
+        var value = newSettings[key];
+        if (value == null) {
+          newSettings.remove(key);
+        }
+
+        mappedSettings[key.valueAsString()] = value;
+      });
+
       await FirebaseFirestore.instance
           .collection('users')
           .doc(user.currentUser!.uid)
-          .update(newSettings.map((key, value) {
-        return MapEntry(key.valueAsString(), value);
-      }));
+          .update(mappedSettings);
+
       newSettings.keys.forEach((key) {
         var settingIndex =
             _user?.settings.indexWhere((element) => element.key == key);

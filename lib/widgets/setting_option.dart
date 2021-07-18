@@ -7,8 +7,8 @@ class SettingOption extends StatefulWidget {
     required this.label,
     required this.icon,
     required this.simpleInput,
-    required this.onChanged,
     required this.initialValue,
+    this.onChanged,
     this.setting,
     this.inputType,
     this.onTapDetail,
@@ -18,7 +18,7 @@ class SettingOption extends StatefulWidget {
   final String label;
   final IconData icon;
   final bool simpleInput;
-  final Function(String? value) onChanged;
+  final Function(String? value)? onChanged;
   final dynamic initialValue;
   final TextInputType? inputType;
   final Setting? setting;
@@ -36,7 +36,7 @@ class _SettingOptionState extends State<SettingOption> {
   void _onChanged(String? value) {
     if (!isValid(value)) {
       // Send null to remove value from the map
-      widget.onChanged(null);
+      widget.onChanged!(null);
       return;
     }
 
@@ -46,7 +46,7 @@ class _SettingOptionState extends State<SettingOption> {
       });
     }
 
-    widget.onChanged(value);
+    widget.onChanged!(value);
   }
 
   bool isValid(String? value) {
