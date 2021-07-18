@@ -4,14 +4,6 @@ import '../models/category.dart';
 import '../models/transaction.dart' as m;
 
 class TransactionsHelper {
-  static CategoryType _getCategoryTypeFromString(String value) {
-    // Firebase can't store enums so we store the value of the enum
-    // Ex: "Incomes"
-    if (value == 'Incomes') return CategoryType.Incomes;
-    if (value == 'Expenses') return CategoryType.Expenses;
-    return CategoryType.Incomes;
-  }
-
   static Future<List<m.Transaction>> searchUserTransactions(
       String userId, int limit) async {
     FirebaseFirestore firestore = FirebaseFirestore.instance;
@@ -35,7 +27,7 @@ class TransactionsHelper {
             amount: doc.data()['amount'],
             categoryId: doc.data()['categoryId'],
             categoryType:
-                _getCategoryTypeFromString(doc.data()['categoryType']),
+                Category.parseCategoryType(doc.data()['categoryType']),
             date: (doc.data()['date'] as Timestamp).toDate(),
             description: doc.data()['description']));
       });

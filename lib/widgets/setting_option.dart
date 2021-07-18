@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../screens/setting_detail.dart';
 import '../models/user.dart';
 
 class SettingOption extends StatefulWidget {
@@ -10,8 +9,10 @@ class SettingOption extends StatefulWidget {
     required this.simpleInput,
     required this.onChanged,
     required this.initialValue,
-    required this.setting,
+    this.setting,
     this.inputType,
+    this.onTapDetail,
+    this.detailIcon,
   });
 
   final String label;
@@ -20,7 +21,9 @@ class SettingOption extends StatefulWidget {
   final Function(String? value) onChanged;
   final dynamic initialValue;
   final TextInputType? inputType;
-  final Setting setting;
+  final Setting? setting;
+  final VoidCallback? onTapDetail;
+  final IconData? detailIcon;
 
   @override
   _SettingOptionState createState() => _SettingOptionState();
@@ -62,18 +65,10 @@ class _SettingOptionState extends State<SettingOption> {
     return true;
   }
 
-  void _openSettingDetail() {
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (ctx) => SettingDetailScreen(setting: widget.setting),
-      ),
-    );
-  }
-
   @override
   void initState() {
     super.initState();
-    if (widget.initialValue != null) {
+    if (widget.initialValue != null && widget.simpleInput) {
       _controller.text = widget.initialValue;
     }
   }
@@ -116,8 +111,8 @@ class _SettingOptionState extends State<SettingOption> {
                 ),
               )
             : IconButton(
-                onPressed: _openSettingDetail,
-                icon: const Icon(Icons.arrow_forward),
+                onPressed: widget.onTapDetail,
+                icon: Icon(widget.detailIcon),
               ),
       ],
     );

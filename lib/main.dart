@@ -61,9 +61,17 @@ class _MyAppState extends State<MyApp> {
                   Provider.of<UserProvider>(ctx, listen: false)
                       .setUser(response.id, response.data()!['email'], "", [
                     model.UserSettings(
-                        model.Setting.Budget, response.data()!['budget']),
+                      model.Setting.Budget,
+                      response.data()!['budget'],
+                    ),
                     model.UserSettings(
-                        model.Setting.Currency, response.data()!['currency']),
+                      model.Setting.Currency,
+                      response.data()!['currency'],
+                    ),
+                    model.UserSettings(
+                      model.Setting.Categories,
+                      response.data()!['categories'],
+                    ),
                   ]);
                   return OverviewScreen();
                 });

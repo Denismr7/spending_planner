@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import '../models/user.dart';
 import '../providers/user.dart';
 import '../widgets/setting_option.dart';
+import 'setting_detail.dart';
 
 class SettingsScreen extends StatefulWidget {
   static const routeName = '/settings';
@@ -32,6 +33,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
     setState(() {
       _editedSettings[settingName] = value;
     });
+  }
+
+  void _openSettingDetail(Setting setting) {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (ctx) => SettingDetailScreen(setting: setting),
+      ),
+    );
   }
 
   void _onSave() async {
@@ -130,6 +139,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
               onChanged: (v) {},
               initialValue: _userSettings[Setting.Categories],
               setting: Setting.Categories,
+              onTapDetail: () => _openSettingDetail(Setting.Categories),
+              detailIcon: Icons.arrow_forward,
             )
           ],
         ),
