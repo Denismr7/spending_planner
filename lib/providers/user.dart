@@ -42,7 +42,7 @@ class UserProvider extends ChangeNotifier {
           newSettings.remove(key);
         }
 
-        mappedSettings[key.valueAsString()] = value;
+        mappedSettings[key.valueAsString().toLowerCase()] = value;
       });
 
       await FirebaseFirestore.instance
