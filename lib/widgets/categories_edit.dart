@@ -29,10 +29,13 @@ class _CategoriesEditState extends State<CategoriesEdit> {
     return parsedList;
   }
 
-  void _showBottomModalSheet(Category? selectedCategory) async {
+  void _showEditCategoryMBS(Category? selectedCategory) async {
     var catIndex = _categories
         .indexWhere((category) => category.id == selectedCategory?.id);
     await showModalBottomSheet(
+      shape: const RoundedRectangleBorder(
+        borderRadius: const BorderRadius.vertical(top: Radius.circular(8)),
+      ),
       isScrollControlled: true,
       context: context,
       builder: (ctx) => EditCategoryForm(initialValue: selectedCategory),
@@ -91,7 +94,7 @@ class _CategoriesEditState extends State<CategoriesEdit> {
               simpleInput: false,
               initialValue: category,
               onChanged: (v) {},
-              onTapDetail: () => _showBottomModalSheet(category),
+              onTapDetail: () => _showEditCategoryMBS(category),
               detailIcon: Icons.edit_rounded,
             ))
         .toList();
@@ -113,7 +116,7 @@ class _CategoriesEditState extends State<CategoriesEdit> {
           ),
         ),
         ElevatedButton(
-            onPressed: () => _showBottomModalSheet(null),
+            onPressed: () => _showEditCategoryMBS(null),
             child: const Text('Create'))
       ],
     );

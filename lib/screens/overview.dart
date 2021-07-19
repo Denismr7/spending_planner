@@ -45,9 +45,11 @@ class _OverviewScreenState extends State<OverviewScreen> {
     return data;
   }
 
-  void _showModalBottomSheet(BuildContext context) {
-    // TODO: Modal w/ rounded top corners, maybe by wrapping the content with a new widget
+  void _showAddTransactionMBS(BuildContext context) {
     showModalBottomSheet(
+      shape: const RoundedRectangleBorder(
+        borderRadius: const BorderRadius.vertical(top: Radius.circular(8)),
+      ),
       isScrollControlled: true,
       context: context,
       builder: (ctx) {
@@ -111,7 +113,7 @@ class _OverviewScreenState extends State<OverviewScreen> {
             icon: const Icon(Icons.settings),
           ),
           ActionButton(
-            onPressed: () => _showModalBottomSheet(context),
+            onPressed: () => _showAddTransactionMBS(context),
             icon: const Icon(Icons.add),
           ),
         ],
