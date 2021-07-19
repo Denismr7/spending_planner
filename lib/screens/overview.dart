@@ -1,6 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
+import 'settings.dart';
+import '../widgets/action_button.dart';
+import '../widgets/expandable_fab.dart';
 import 'error.dart';
 import 'loading.dart';
 import '../widgets/transaction_list.dart';
@@ -42,8 +45,12 @@ class _OverviewScreenState extends State<OverviewScreen> {
     return data;
   }
 
-  void _showModalBottomSheet(BuildContext context) {
+  void _showAddTransactionMBS(BuildContext context) {
     showModalBottomSheet(
+      shape: const RoundedRectangleBorder(
+        borderRadius: const BorderRadius.vertical(top: Radius.circular(8)),
+      ),
+      isScrollControlled: true,
       context: context,
       builder: (ctx) {
         return AddTransaction();
@@ -95,9 +102,21 @@ class _OverviewScreenState extends State<OverviewScreen> {
               );
             }),
       ),
-      floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.add),
-        onPressed: () => _showModalBottomSheet(context),
+      floatingActionButton: ExpandableFab(
+        distance: 80.0,
+        initialOpen: false,
+        children: [
+          ActionButton(
+            onPressed: () {
+              Navigator.of(context).pushNamed(SettingsScreen.routeName);
+            },
+            icon: const Icon(Icons.settings),
+          ),
+          ActionButton(
+            onPressed: () => _showAddTransactionMBS(context),
+            icon: const Icon(Icons.add),
+          ),
+        ],
       ),
     );
   }

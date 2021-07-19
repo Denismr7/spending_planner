@@ -5,6 +5,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:provider/provider.dart';
 
+import 'screens/settings.dart';
 import 'screens/overview.dart';
 import 'screens/loading.dart';
 import 'screens/error.dart';
@@ -60,9 +61,17 @@ class _MyAppState extends State<MyApp> {
                   Provider.of<UserProvider>(ctx, listen: false)
                       .setUser(response.id, response.data()!['email'], "", [
                     model.UserSettings(
-                        model.Setting.Budget, response.data()!['budget']),
+                      model.Setting.Budget,
+                      response.data()!['budget'],
+                    ),
                     model.UserSettings(
-                        model.Setting.Currency, response.data()!['currency']),
+                      model.Setting.Currency,
+                      response.data()!['currency'],
+                    ),
+                    model.UserSettings(
+                      model.Setting.Categories,
+                      response.data()!['categories'],
+                    ),
                   ]);
                   return OverviewScreen();
                 });
@@ -82,19 +91,20 @@ class _MyAppState extends State<MyApp> {
     return FutureBuilder(
         future: _initialization,
         builder: (context, snapshot) {
-          return MaterialApp(
-            title: 'Spending Planner',
-            theme: ThemeData(
-              primarySwatch: Colors.green,
-              accentColor: Colors.lightGreen,
+          return ChangeNotifierProvider(
+            create: (ctx) => UserProvider(),
+            child: MaterialApp(
+              title: 'Spending Planner',
+              theme: ThemeData(
+                primarySwatch: Colors.green,
+                accentColor: Colors.deepPurple,
+              ),
+              home: _buildHome(snapshot),
+              routes: {
+                OverviewScreen.routeName: (ctx) => OverviewScreen(),
+                SettingsScreen.routeName: (ctx) => SettingsScreen()
+              },
             ),
-            home: ChangeNotifierProvider(
-              create: (ctx) => UserProvider(),
-              child: _buildHome(snapshot),
-            ),
-            routes: {
-              OverviewScreen.routeName: (ctx) => OverviewScreen(),
-            },
           );
         });
   }

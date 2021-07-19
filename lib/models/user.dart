@@ -23,4 +23,11 @@ class UserSettings {
 enum Setting {
   Currency,
   Budget,
+  Categories,
+}
+
+extension ParseToString on Setting {
+  String valueAsString() {
+    return this.toString().substring(this.toString().indexOf('.') + 1);
+  }
 }

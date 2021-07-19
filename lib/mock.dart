@@ -91,25 +91,21 @@ var categoriesMock = [
   Category(
     id: "1",
     name: "Salary",
-    userId: "1",
     categoryType: CategoryType.Incomes,
   ),
   Category(
     id: "2",
     name: "Shops",
-    userId: "1",
     categoryType: CategoryType.Expenses,
   ),
   Category(
     id: "3",
     name: "Transfers",
-    userId: "1",
     categoryType: CategoryType.Incomes,
   ),
   Category(
     id: "4",
     name: "Subscriptions",
-    userId: "1",
     categoryType: CategoryType.Expenses,
   ),
 ];

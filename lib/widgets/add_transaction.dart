@@ -1,15 +1,16 @@
+import 'dart:convert';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:spending_planner/helpers/transactions.dart';
-import 'package:spending_planner/models/transaction.dart';
-import 'package:spending_planner/widgets/datepicker_field.dart';
+import 'package:provider/provider.dart';
 
-import 'add_transaction_input.dart';
+import '../helpers/transactions.dart';
+import 'datepicker_field.dart';
+import 'modal_bottom_sheet_input.dart';
 import 'select_field.dart';
 import '../models/category.dart';
-// TODO: Use real data
-import '../mock.dart';
+import '../providers/user.dart';
+import '../models/user.dart';
 
 class AddTransaction extends StatefulWidget {
   const AddTransaction();
@@ -29,8 +30,20 @@ class _AddTransactionState extends State<AddTransaction> {
   @override
   void initState() {
     super.initState();
-    _categories = categoriesMock;
+    _categories = _parseJsonCategories(
+        Provider.of<UserProvider>(context, listen: false)
+            .getSettingValue(Setting.Categories));
     _createMapFromCategories(_categories);
+  }
+
+  List<Category> _parseJsonCategories(String jsonData) {
+    List<Category> parsedList = [];
+    List<dynamic> parsedJson = jsonDecode(jsonData);
+    parsedJson.forEach((element) {
+      parsedList.add(Category.fromJson(element));
+    });
+
+    return parsedList;
   }
 
   void _createMapFromCategories(List<Category> categories) {
@@ -89,23 +102,26 @@ class _AddTransactionState extends State<AddTransaction> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: MediaQuery.of(context).size.height / 0.4,
+    return Padding(
+      padding: EdgeInsets.only(
+        bottom: MediaQuery.of(context).viewInsets.bottom / 2,
+      ),
       child: Form(
         key: _formKey,
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+          padding: const EdgeInsets.all(20),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.end,
+            mainAxisSize: MainAxisSize.min,
             children: [
-              AddTransactionInput(
+              ModalBottomSheetInput(
                 labelText: 'Description',
                 validator: _validateField,
                 onSaved: (val) => _saveField('Description', val),
                 type: 'text',
               ),
               const SizedBox(height: 15),
-              AddTransactionInput(
+              ModalBottomSheetInput(
                 labelText: 'Amount',
                 validator: _validateField,
                 onSaved: (val) => _saveField('Amount', val),

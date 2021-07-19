@@ -36,6 +36,9 @@ class TransactionItem extends StatelessWidget {
     return GestureDetector(
       onLongPress: () {
         showModalBottomSheet(
+          shape: const RoundedRectangleBorder(
+            borderRadius: const BorderRadius.vertical(top: Radius.circular(8)),
+          ),
           context: context,
           builder: (ctx) => TransactionOptionsSheet(id),
         ).then((value) {
