@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'add_transaction_input.dart';
+import 'modal_bottom_sheet_input.dart';
 import '../models/category.dart';
 import 'select_field.dart';
 
@@ -75,7 +75,7 @@ class _EditCategoryFormState extends State<EditCategoryForm> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             mainAxisSize: MainAxisSize.min,
             children: [
-              AddTransactionInput(
+              ModalBottomSheetInput(
                 labelText: 'Name',
                 initialValue: widget.initialValue?.name ?? null,
                 validator: _validateField,

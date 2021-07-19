@@ -6,7 +6,7 @@ import 'package:provider/provider.dart';
 
 import '../helpers/transactions.dart';
 import 'datepicker_field.dart';
-import 'add_transaction_input.dart';
+import 'modal_bottom_sheet_input.dart';
 import 'select_field.dart';
 import '../models/category.dart';
 import '../providers/user.dart';
@@ -114,14 +114,14 @@ class _AddTransactionState extends State<AddTransaction> {
             crossAxisAlignment: CrossAxisAlignment.end,
             mainAxisSize: MainAxisSize.min,
             children: [
-              AddTransactionInput(
+              ModalBottomSheetInput(
                 labelText: 'Description',
                 validator: _validateField,
                 onSaved: (val) => _saveField('Description', val),
                 type: 'text',
               ),
               const SizedBox(height: 15),
-              AddTransactionInput(
+              ModalBottomSheetInput(
                 labelText: 'Amount',
                 validator: _validateField,
                 onSaved: (val) => _saveField('Amount', val),

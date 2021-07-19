@@ -46,6 +46,7 @@ class _OverviewScreenState extends State<OverviewScreen> {
   }
 
   void _showModalBottomSheet(BuildContext context) {
+    // TODO: Modal w/ rounded top corners, maybe by wrapping the content with a new widget
     showModalBottomSheet(
       isScrollControlled: true,
       context: context,

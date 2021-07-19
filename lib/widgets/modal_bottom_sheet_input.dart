@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-class AddTransactionInput extends StatefulWidget {
-  // TODO: Change name to ModalBottomSheetInput
-  const AddTransactionInput({
+class ModalBottomSheetInput extends StatefulWidget {
+  const ModalBottomSheetInput({
     Key? key,
     required this.labelText,
     required this.validator,
@@ -19,10 +18,10 @@ class AddTransactionInput extends StatefulWidget {
   final String? initialValue;
 
   @override
-  _AddTransactionInputState createState() => _AddTransactionInputState();
+  _ModalBottomSheetInputState createState() => _ModalBottomSheetInputState();
 }
 
-class _AddTransactionInputState extends State<AddTransactionInput> {
+class _ModalBottomSheetInputState extends State<ModalBottomSheetInput> {
   TextInputType _getKeyBoardType() {
     switch (widget.type) {
       case "text":
