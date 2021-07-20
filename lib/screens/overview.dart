@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
+import 'insights_screen.dart';
 import 'settings.dart';
 import '../widgets/action_button.dart';
 import '../widgets/expandable_fab.dart';
@@ -103,7 +104,7 @@ class _OverviewScreenState extends State<OverviewScreen> {
             }),
       ),
       floatingActionButton: ExpandableFab(
-        distance: 80.0,
+        distance: 90.0,
         initialOpen: false,
         children: [
           ActionButton(
@@ -111,6 +112,13 @@ class _OverviewScreenState extends State<OverviewScreen> {
               Navigator.of(context).pushNamed(SettingsScreen.routeName);
             },
             icon: const Icon(Icons.settings),
+          ),
+          ActionButton(
+            onPressed: () {
+              Navigator.of(context)
+                  .pushReplacementNamed(InsightsScreen.routeName);
+            },
+            icon: const Icon(Icons.bar_chart_rounded),
           ),
           ActionButton(
             onPressed: () => _showAddTransactionMBS(context),

@@ -5,6 +5,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:provider/provider.dart';
 
+import 'screens/insights_screen.dart';
 import 'screens/settings.dart';
 import 'screens/overview.dart';
 import 'screens/loading.dart';
@@ -102,7 +103,8 @@ class _MyAppState extends State<MyApp> {
               home: _buildHome(snapshot),
               routes: {
                 OverviewScreen.routeName: (ctx) => OverviewScreen(),
-                SettingsScreen.routeName: (ctx) => SettingsScreen()
+                SettingsScreen.routeName: (ctx) => SettingsScreen(),
+                InsightsScreen.routeName: (ctx) => InsightsScreen(),
               },
             ),
           );
