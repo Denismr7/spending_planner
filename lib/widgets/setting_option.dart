@@ -60,6 +60,21 @@ class _SettingOptionState extends State<SettingOption> {
         _errorMessage = "Invalid value";
       });
       return false;
+    } else if (widget.inputType == TextInputType.number ||
+        widget.inputType == TextInputType.numberWithOptions(decimal: true)) {
+      var numberOfDecimalSeparators = 0;
+      for (var i = 0; i < value.length; i++) {
+        var char = value[i];
+        if (char == '.' || char == ',') {
+          numberOfDecimalSeparators++;
+        }
+      }
+      if (numberOfDecimalSeparators > 1) {
+        setState(() {
+          _errorMessage = 'Invalid';
+        });
+        return false;
+      }
     }
 
     return true;

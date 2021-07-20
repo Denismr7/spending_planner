@@ -35,12 +35,6 @@ class _EditCategoryFormState extends State<EditCategoryForm> {
     Navigator.of(context).pop(_formData);
   }
 
-  String? _validateField(String? value) {
-    if (value == null || value.isEmpty) {
-      return 'Field required';
-    }
-  }
-
   void _saveField(String fieldName, String value) {
     _formData[fieldName] = value;
 
@@ -78,7 +72,6 @@ class _EditCategoryFormState extends State<EditCategoryForm> {
               ModalBottomSheetInput(
                 labelText: 'Name',
                 initialValue: widget.initialValue?.name ?? null,
-                validator: _validateField,
                 onSaved: (v) => _saveField('name', v!),
                 type: 'text',
               ),

@@ -54,12 +54,6 @@ class _AddTransactionState extends State<AddTransaction> {
     _mappedCategories = map;
   }
 
-  String? _validateField(String? value) {
-    if (value == null || value.isEmpty) {
-      return 'Field required';
-    }
-  }
-
   void _saveField(String fieldName, dynamic value) {
     _formData[fieldName] = value;
 
@@ -116,14 +110,12 @@ class _AddTransactionState extends State<AddTransaction> {
             children: [
               ModalBottomSheetInput(
                 labelText: 'Description',
-                validator: _validateField,
                 onSaved: (val) => _saveField('Description', val),
                 type: 'text',
               ),
               const SizedBox(height: 15),
               ModalBottomSheetInput(
                 labelText: 'Amount',
-                validator: _validateField,
                 onSaved: (val) => _saveField('Amount', val),
                 type: 'number',
               ),
