@@ -49,7 +49,9 @@ class _OverviewScreenState extends State<OverviewScreen> {
   void _showAddTransactionMBS(BuildContext context) {
     showModalBottomSheet(
       shape: const RoundedRectangleBorder(
-        borderRadius: const BorderRadius.vertical(top: Radius.circular(8)),
+        borderRadius: const BorderRadius.vertical(
+          top: const Radius.circular(8),
+        ),
       ),
       isScrollControlled: true,
       context: context,

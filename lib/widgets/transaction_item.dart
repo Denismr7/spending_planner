@@ -37,7 +37,9 @@ class TransactionItem extends StatelessWidget {
       onLongPress: () {
         showModalBottomSheet(
           shape: const RoundedRectangleBorder(
-            borderRadius: const BorderRadius.vertical(top: Radius.circular(8)),
+            borderRadius: const BorderRadius.vertical(
+              top: const Radius.circular(8),
+            ),
           ),
           context: context,
           builder: (ctx) => TransactionOptionsSheet(id),

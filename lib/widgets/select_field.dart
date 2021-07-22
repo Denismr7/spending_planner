@@ -55,7 +55,9 @@ class _SelectFieldState extends State<SelectField> {
       padding: const EdgeInsets.symmetric(horizontal: 10),
       decoration: BoxDecoration(
         border: Border.all(color: Colors.black26),
-        borderRadius: const BorderRadius.all(Radius.circular(10)),
+        borderRadius: const BorderRadius.all(
+          const Radius.circular(10),
+        ),
       ),
       child: DropdownButton(
         items: _buildDropdownItems(widget.items),

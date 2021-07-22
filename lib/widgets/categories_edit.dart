@@ -34,7 +34,8 @@ class _CategoriesEditState extends State<CategoriesEdit> {
         .indexWhere((category) => category.id == selectedCategory?.id);
     await showModalBottomSheet(
       shape: const RoundedRectangleBorder(
-        borderRadius: const BorderRadius.vertical(top: Radius.circular(8)),
+        borderRadius:
+            const BorderRadius.vertical(top: const Radius.circular(8)),
       ),
       isScrollControlled: true,
       context: context,

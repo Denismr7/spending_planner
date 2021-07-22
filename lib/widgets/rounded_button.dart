@@ -23,7 +23,9 @@ class RoundedButton extends StatelessWidget {
               child: Text(buttonText),
               style: ElevatedButton.styleFrom(
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(30),
+                  borderRadius: const BorderRadius.all(
+                    const Radius.circular(30),
+                  ),
                 ),
                 textStyle: const TextStyle(
                   fontSize: 20,
@@ -36,7 +38,9 @@ class RoundedButton extends StatelessWidget {
               child: Text(buttonText),
               style: OutlinedButton.styleFrom(
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(30),
+                  borderRadius: const BorderRadius.all(
+                    const Radius.circular(30),
+                  ),
                 ),
                 textStyle: const TextStyle(
                   fontSize: 20,

@@ -65,10 +65,14 @@ class _RoundedFormFieldState extends State<RoundedFormField> {
           fontSize: 20,
         ),
         border: const OutlineInputBorder(
-          borderRadius: const BorderRadius.all(Radius.circular(30)),
+          borderRadius: const BorderRadius.all(
+            const Radius.circular(30),
+          ),
         ),
         enabledBorder: const OutlineInputBorder(
-          borderRadius: const BorderRadius.all(Radius.circular(30)),
+          borderRadius: const BorderRadius.all(
+            const Radius.circular(30),
+          ),
           borderSide: const BorderSide(
             width: 2.0,
             color: const Color.fromARGB(50, 28, 28, 28),

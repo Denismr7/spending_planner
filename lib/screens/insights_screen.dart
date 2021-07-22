@@ -4,6 +4,7 @@ import 'overview.dart';
 import 'settings.dart';
 import '../widgets/action_button.dart';
 import '../widgets/expandable_fab.dart';
+import '../widgets/insights_list.dart';
 
 class InsightsScreen extends StatelessWidget {
   static const routeName = '/insights';
@@ -15,9 +16,7 @@ class InsightsScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Insights'),
       ),
-      body: Center(
-        child: Text('Insights!'),
-      ),
+      body: InsightsList(),
       floatingActionButton: ExpandableFab(
         distance: 90.0,
         initialOpen: false,

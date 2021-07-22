@@ -141,7 +141,7 @@ class _AddTransactionState extends State<AddTransaction> {
                   style: ElevatedButton.styleFrom(
                     shape: const RoundedRectangleBorder(
                       borderRadius: const BorderRadius.all(
-                        Radius.circular(10),
+                        const Radius.circular(10),
                       ),
                     ),
                   ),
