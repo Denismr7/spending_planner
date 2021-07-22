@@ -1,4 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:spending_planner/models/bar_chart_insights_data.dart';
+import 'package:spending_planner/widgets/bar_chart_card.dart';
+
+List<BarChartInsightsData> mockData = [
+  BarChartInsightsData(label: 'L', value: 30),
+  BarChartInsightsData(label: 'M', value: 10),
+  BarChartInsightsData(label: 'X', value: 40),
+  BarChartInsightsData(label: 'J', value: 10),
+  BarChartInsightsData(label: 'V', value: 25),
+  BarChartInsightsData(label: 'S', value: 40),
+  BarChartInsightsData(label: 'D', value: 40),
+];
 
 class InsightCard extends StatelessWidget {
   const InsightCard({
@@ -32,6 +44,7 @@ class InsightCard extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
@@ -45,7 +58,10 @@ class InsightCard extends StatelessWidget {
                 if (isExpandable)
                   IconButton(
                     onPressed: () {},
-                    icon: const Icon(Icons.arrow_right),
+                    icon: const Icon(
+                      Icons.arrow_right,
+                      size: 35,
+                    ),
                     color: Colors.white,
                   ),
               ],
@@ -60,11 +76,7 @@ class InsightCard extends StatelessWidget {
                 ),
               ),
             Container(
-              height: 125,
-              child: Center(
-                child: Text('Chart placeholder!'),
-              ),
-            ),
+                width: double.infinity, child: BarChartCard(data: mockData)),
           ],
         ),
       ),
