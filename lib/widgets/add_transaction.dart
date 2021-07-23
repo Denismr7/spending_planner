@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -30,20 +28,10 @@ class _AddTransactionState extends State<AddTransaction> {
   @override
   void initState() {
     super.initState();
-    _categories = _parseJsonCategories(
+    _categories = Category.parseJsonCategories(
         Provider.of<UserProvider>(context, listen: false)
             .getSettingValue(Setting.Categories));
     _createMapFromCategories(_categories);
-  }
-
-  List<Category> _parseJsonCategories(String jsonData) {
-    List<Category> parsedList = [];
-    List<dynamic> parsedJson = jsonDecode(jsonData);
-    parsedJson.forEach((element) {
-      parsedList.add(Category.fromJson(element));
-    });
-
-    return parsedList;
   }
 
   void _createMapFromCategories(List<Category> categories) {

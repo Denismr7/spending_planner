@@ -24,6 +24,8 @@ class _InsightsListState extends State<InsightsList> {
   List<BarChartInsightsData> _yearSpending = [];
   List<BarChartInsightsData> _categoriesSpending = [];
   List<Transaction> _yearTransactions = [];
+  double? _estimatedMonthExpense;
+  double? _monthAverageExpense;
   var _currentDate = DateTime.now();
 
   Future<void> _fetchYearTransactions() async {
@@ -44,8 +46,15 @@ class _InsightsListState extends State<InsightsList> {
     for (var i = 1; i <= DateTime.monthsPerYear; i++) {
       // Calculate expenses current month
       double currentMonthExpenses = 0;
-      yearExpenses
-          .where((element) => element.date.month == i)
+      var monthExpenses =
+          yearExpenses.where((element) => element.date.month == i).toList();
+
+      // Current month charts data
+      if (i == _currentDate.month) {
+        _calculateMonthSpending(monthExpenses);
+        _calculateTopCategories(monthExpenses);
+      }
+      monthExpenses
           .forEach((element) => currentMonthExpenses += element.amount);
 
       // Create label with the first letter of the current month
@@ -57,25 +66,31 @@ class _InsightsListState extends State<InsightsList> {
             label: firstLetterMonth, value: currentMonthExpenses),
       );
     }
+
+    // Get average
+    int totalMonths = 0;
+    double totalSpent = 0;
+    _yearSpending.forEach((element) {
+      if (element.value > 0) {
+        totalMonths++;
+        totalSpent += element.value;
+      }
+    });
+    _monthAverageExpense = totalMonths > 0 ? totalSpent / totalMonths : 0;
   }
 
-  void _calculateTopCategories() {
-    // Get user categories
+  void _calculateTopCategories(List<Transaction> monthTransactions) {
+    // Get user expenses categories
     String json = Provider.of<UserProvider>(context, listen: false)
         .getSettingValue(Setting.Categories);
-    List<Category> categories = Category.parseJsonCategories(json);
-
-    // Get current month transactions
-    var monthTransactions = _yearTransactions
-        .where((element) =>
-            element.date.month == _currentDate.month &&
-            element.categoryType == CategoryType.Expenses)
+    List<Category> categories = Category.parseJsonCategories(json)
+        .where((element) => element.categoryType == CategoryType.Expenses)
         .toList();
 
     // Calculate data
     for (var i = 0; i < categories.length; i++) {
       var currentCategory = categories[i];
-      var categoryLabel = currentCategory.name.substring(0, 2);
+      var categoryLabel = currentCategory.name.substring(0, 4);
       double categoryAmount = 0;
       monthTransactions.forEach((element) {
         if (element.categoryId == currentCategory.id) {
@@ -87,21 +102,23 @@ class _InsightsListState extends State<InsightsList> {
       _categoriesSpending.add(
           BarChartInsightsData(label: categoryLabel, value: categoryAmount));
     }
+
+    _categoriesSpending.sort((a, b) => b.value.compareTo(a.value));
   }
 
-  void _calculateMonthSpending() {
-    var monthTransactions = _yearTransactions
-        .where((element) =>
-            element.date.month == _currentDate.month &&
-            element.categoryType == CategoryType.Expenses)
-        .toList();
+  void _calculateMonthSpending(List<Transaction> monthTransactions) {
     Map<String, double> valuesInWeeks =
         _splitMonthInWeeksWithAmounts(monthTransactions);
 
-    // Transform map
+    // Transform map and get estimated
+    double monthTotal = 0;
     valuesInWeeks.forEach((key, value) {
+      monthTotal += value;
       _currentMonthSpending.add(BarChartInsightsData(label: key, value: value));
     });
+    _estimatedMonthExpense = valuesInWeeks.keys.length > 0
+        ? monthTotal / valuesInWeeks.keys.length
+        : 0;
   }
 
   Map<String, double> _splitMonthInWeeksWithAmounts(
@@ -152,9 +169,7 @@ class _InsightsListState extends State<InsightsList> {
   void initState() {
     super.initState();
     _fetchYearTransactions().then((_) {
-      _calculateMonthSpending();
       _calculateYearSpendingInMonths();
-      _calculateTopCategories();
 
       // Reload widget once finished
       setState(() {});
@@ -169,13 +184,15 @@ class _InsightsListState extends State<InsightsList> {
         children: [
           InsightCard(
             title: 'Month expenses',
-            subtitle: 'Estimated expense: X \$',
+            subtitle:
+                'Estimated expense: ${_estimatedMonthExpense?.toStringAsFixed(2)} \$',
             isExpandable: false,
             chartData: _currentMonthSpending,
           ),
           InsightCard(
             title: 'This year',
-            subtitle: 'On average you have spent X \$ per month',
+            subtitle:
+                'On average you have spent ${_monthAverageExpense?.toStringAsFixed(2)} \$ per month',
             isExpandable: true,
             chartData: _yearSpending,
           ),
