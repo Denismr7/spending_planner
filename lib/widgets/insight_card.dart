@@ -2,28 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:spending_planner/models/bar_chart_insights_data.dart';
 import 'package:spending_planner/widgets/bar_chart_card.dart';
 
-List<BarChartInsightsData> mockData = [
-  BarChartInsightsData(label: 'L', value: 30),
-  BarChartInsightsData(label: 'M', value: 10),
-  BarChartInsightsData(label: 'X', value: 40),
-  BarChartInsightsData(label: 'J', value: 10),
-  BarChartInsightsData(label: 'V', value: 25),
-  BarChartInsightsData(label: 'S', value: 40),
-  BarChartInsightsData(label: 'D', value: 40),
-];
-
 class InsightCard extends StatelessWidget {
   const InsightCard({
     Key? key,
     required this.title,
     required this.isExpandable,
+    required this.chartData,
     this.subtitle,
   }) : super(key: key);
 
   final String title;
   final String? subtitle;
   final bool isExpandable;
-  // TODO: Include chart-related data
+  final List<BarChartInsightsData> chartData;
 
   @override
   Widget build(BuildContext context) {
@@ -76,7 +67,9 @@ class InsightCard extends StatelessWidget {
                 ),
               ),
             Container(
-                width: double.infinity, child: BarChartCard(data: mockData)),
+              width: double.infinity,
+              child: BarChartCard(data: chartData),
+            ),
           ],
         ),
       ),

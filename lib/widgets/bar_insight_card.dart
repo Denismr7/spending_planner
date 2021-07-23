@@ -12,11 +12,12 @@ class BarInsightCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FractionallySizedBox(
-      heightFactor: heightFactor,
-      child: Column(
-        children: [
-          Expanded(
+    return Column(
+      children: [
+        Expanded(
+          child: FractionallySizedBox(
+            heightFactor: heightFactor,
+            alignment: Alignment.bottomLeft,
             child: Container(
               width: 15,
               decoration: BoxDecoration(
@@ -28,14 +29,14 @@ class BarInsightCard extends StatelessWidget {
               child: null,
             ),
           ),
-          Text(
-            label,
-            style: TextStyle(
-              color: Colors.white,
-            ),
-          )
-        ],
-      ),
+        ),
+        Text(
+          label,
+          style: TextStyle(
+            color: Colors.white,
+          ),
+        )
+      ],
     );
   }
 }

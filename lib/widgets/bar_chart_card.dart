@@ -22,6 +22,15 @@ class BarChartCard extends StatelessWidget {
     return double.parse(heightFactor.toStringAsFixed(2));
   }
 
+  List<Widget> _buildChartBars() {
+    List<Widget> bars = [];
+    data.forEach((e) {
+      var heightFactor = calculateHeightFactor(e.value);
+      bars.add(BarInsightCard(heightFactor: heightFactor, label: e.label));
+    });
+    return bars;
+  }
+
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -30,15 +39,7 @@ class BarChartCard extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.end,
-        children: [
-          ...data
-              .map(
-                (e) => BarInsightCard(
-                    heightFactor: calculateHeightFactor(e.value),
-                    label: e.label),
-              )
-              .toList()
-        ],
+        children: _buildChartBars(),
       ),
     );
   }

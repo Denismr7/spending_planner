@@ -38,7 +38,8 @@ class _OverviewScreenState extends State<OverviewScreen> {
 
   Future<List<Transaction>> _getTransactions(String userId, int limit,
       [bool update = false]) async {
-    final data = await TransactionsHelper.searchUserTransactions(userId, limit);
+    final data = await TransactionsHelper.searchUserTransactions(
+        userId: userId, limit: limit);
     _fetchedTransactions = data;
     if (update) {
       setState(() {});
