@@ -1,9 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:spending_planner/helpers/transactions.dart';
-import 'package:spending_planner/models/bar_chart_insights_data.dart';
-import 'package:spending_planner/models/category.dart';
-import 'package:spending_planner/models/transaction.dart';
+import 'package:intl/intl.dart';
+
+import '../helpers/transactions.dart';
+import '../models/bar_chart_insights_data.dart';
+import '../models/category.dart';
+import '../models/transaction.dart';
 
 import 'insight_card.dart';
 
@@ -30,6 +32,28 @@ class _InsightsListState extends State<InsightsList> {
     );
 
     _yearTransactions = transactions.reversed.toList();
+  }
+
+  void _calculateYearSpendingInMonths() {
+    var yearExpenses = _yearTransactions
+        .where((element) => element.categoryType == CategoryType.Expenses);
+
+    for (var i = 1; i <= DateTime.monthsPerYear; i++) {
+      // Calculate expenses current month
+      double currentMonthExpenses = 0;
+      yearExpenses
+          .where((element) => element.date.month == i)
+          .forEach((element) => currentMonthExpenses += element.amount);
+
+      // Create label with the first letter of the current month
+      var currentMonthDate = DateTime(_currentDate.year, i);
+      var firstLetterMonth =
+          DateFormat.MMMM().format(currentMonthDate).substring(0, 1);
+      _yearSpending.add(
+        BarChartInsightsData(
+            label: firstLetterMonth, value: currentMonthExpenses),
+      );
+    }
   }
 
   void _calculateMonthSpending() {
@@ -96,6 +120,7 @@ class _InsightsListState extends State<InsightsList> {
     super.initState();
     _fetchYearTransactions().then((_) {
       _calculateMonthSpending();
+      _calculateYearSpendingInMonths();
 
       // Reload widget once finished
       setState(() {});
@@ -114,11 +139,12 @@ class _InsightsListState extends State<InsightsList> {
             isExpandable: false,
             chartData: _currentMonthSpending,
           ),
-          // InsightCard(
-          //   title: 'This year',
-          //   subtitle: 'On average you have spent X \$ per month',
-          //   isExpandable: true,
-          // ),
+          InsightCard(
+            title: 'This year',
+            subtitle: 'On average you have spent X \$ per month',
+            isExpandable: true,
+            chartData: _yearSpending,
+          ),
           // InsightCard(
           //   title: 'Top categories',
           //   subtitle: 'Expenses',
