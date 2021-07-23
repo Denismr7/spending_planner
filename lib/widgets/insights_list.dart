@@ -1,11 +1,14 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 import '../helpers/transactions.dart';
 import '../models/bar_chart_insights_data.dart';
 import '../models/category.dart';
 import '../models/transaction.dart';
+import '../models/user.dart';
+import '../providers/user.dart';
 
 import 'insight_card.dart';
 
@@ -53,6 +56,36 @@ class _InsightsListState extends State<InsightsList> {
         BarChartInsightsData(
             label: firstLetterMonth, value: currentMonthExpenses),
       );
+    }
+  }
+
+  void _calculateTopCategories() {
+    // Get user categories
+    String json = Provider.of<UserProvider>(context, listen: false)
+        .getSettingValue(Setting.Categories);
+    List<Category> categories = Category.parseJsonCategories(json);
+
+    // Get current month transactions
+    var monthTransactions = _yearTransactions
+        .where((element) =>
+            element.date.month == _currentDate.month &&
+            element.categoryType == CategoryType.Expenses)
+        .toList();
+
+    // Calculate data
+    for (var i = 0; i < categories.length; i++) {
+      var currentCategory = categories[i];
+      var categoryLabel = currentCategory.name.substring(0, 2);
+      double categoryAmount = 0;
+      monthTransactions.forEach((element) {
+        if (element.categoryId == currentCategory.id) {
+          categoryAmount += element.amount;
+        }
+      });
+
+      // Create chart data
+      _categoriesSpending.add(
+          BarChartInsightsData(label: categoryLabel, value: categoryAmount));
     }
   }
 
@@ -121,6 +154,7 @@ class _InsightsListState extends State<InsightsList> {
     _fetchYearTransactions().then((_) {
       _calculateMonthSpending();
       _calculateYearSpendingInMonths();
+      _calculateTopCategories();
 
       // Reload widget once finished
       setState(() {});
@@ -145,11 +179,12 @@ class _InsightsListState extends State<InsightsList> {
             isExpandable: true,
             chartData: _yearSpending,
           ),
-          // InsightCard(
-          //   title: 'Top categories',
-          //   subtitle: 'Expenses',
-          //   isExpandable: true,
-          // ),
+          InsightCard(
+            title: 'Top categories',
+            subtitle: 'By expenses this month',
+            isExpandable: true,
+            chartData: _categoriesSpending,
+          ),
         ],
       ),
     );
