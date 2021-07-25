@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:spending_planner/models/bar_chart_insights_data.dart';
-import 'package:spending_planner/widgets/bar_chart_card.dart';
 
-class InsightCard extends StatelessWidget {
+import '../models/bar_chart_insights_data.dart';
+import 'bar_chart_card.dart';
+
+class InsightCard extends StatefulWidget {
   const InsightCard({
     Key? key,
     required this.title,
@@ -17,9 +18,16 @@ class InsightCard extends StatelessWidget {
   final List<BarChartInsightsData> chartData;
 
   @override
+  _InsightCardState createState() => _InsightCardState();
+}
+
+class _InsightCardState extends State<InsightCard> {
+  var _expanded = false;
+
+  @override
   Widget build(BuildContext context) {
     return Container(
-      height: 220,
+      height: _expanded ? 400 : 220,
       width: 350,
       decoration: BoxDecoration(
         borderRadius: const BorderRadius.all(
@@ -42,24 +50,31 @@ class InsightCard extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      title,
+                      widget.title,
                       style: const TextStyle(
                         fontSize: 24,
                         fontWeight: FontWeight.w600,
                         color: Colors.white,
                       ),
                     ),
-                    if (isExpandable)
-                      Icon(
-                        Icons.arrow_right,
-                        size: 35,
-                        color: Colors.white,
+                    if (widget.isExpandable)
+                      GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            _expanded = !_expanded;
+                          });
+                        },
+                        child: Icon(
+                          _expanded ? Icons.arrow_drop_down : Icons.arrow_right,
+                          size: 35,
+                          color: Colors.white,
+                        ),
                       ),
                   ],
                 ),
-                if (subtitle != null)
+                if (widget.subtitle != null)
                   Text(
-                    subtitle!,
+                    widget.subtitle!,
                     style: const TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.w300,
@@ -68,9 +83,12 @@ class InsightCard extends StatelessWidget {
                   ),
               ],
             ),
-            Container(
-              width: double.infinity,
-              child: BarChartCard(data: chartData),
+            const SizedBox(height: 10),
+            Expanded(
+              child: BarChartCard(
+                data: widget.chartData,
+                expanded: _expanded,
+              ),
             ),
           ],
         ),

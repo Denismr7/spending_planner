@@ -59,8 +59,7 @@ class _InsightsListState extends State<InsightsList> {
 
       // Create label with the first letter of the current month
       var currentMonthDate = DateTime(_currentDate.year, i);
-      var firstLetterMonth =
-          DateFormat.MMMM().format(currentMonthDate).substring(0, 1);
+      var firstLetterMonth = DateFormat.MMMM().format(currentMonthDate);
       _yearSpending.add(
         BarChartInsightsData(
             label: firstLetterMonth, value: currentMonthExpenses),
@@ -90,7 +89,6 @@ class _InsightsListState extends State<InsightsList> {
     // Calculate data
     for (var i = 0; i < categories.length; i++) {
       var currentCategory = categories[i];
-      var categoryLabel = currentCategory.name.substring(0, 4);
       double categoryAmount = 0;
       monthTransactions.forEach((element) {
         if (element.categoryId == currentCategory.id) {
@@ -99,8 +97,8 @@ class _InsightsListState extends State<InsightsList> {
       });
 
       // Create chart data
-      _categoriesSpending.add(
-          BarChartInsightsData(label: categoryLabel, value: categoryAmount));
+      _categoriesSpending.add(BarChartInsightsData(
+          label: currentCategory.name, value: categoryAmount));
     }
 
     _categoriesSpending.sort((a, b) => b.value.compareTo(a.value));
@@ -178,6 +176,8 @@ class _InsightsListState extends State<InsightsList> {
 
   @override
   Widget build(BuildContext context) {
+    var currency = Provider.of<UserProvider>(context, listen: false)
+        .getSettingValue(Setting.Currency);
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
       child: ListView(
@@ -185,14 +185,14 @@ class _InsightsListState extends State<InsightsList> {
           InsightCard(
             title: 'Month expenses',
             subtitle:
-                'Estimated expense: ${_estimatedMonthExpense?.toStringAsFixed(2)} \$',
+                'Estimated expense: ${_estimatedMonthExpense?.toStringAsFixed(2)} $currency',
             isExpandable: false,
             chartData: _currentMonthSpending,
           ),
           InsightCard(
             title: 'This year',
             subtitle:
-                'On average you have spent ${_monthAverageExpense?.toStringAsFixed(2)} \$ per month',
+                'On average you have spent ${_monthAverageExpense?.toStringAsFixed(2)} $currency per month',
             isExpandable: true,
             chartData: _yearSpending,
           ),

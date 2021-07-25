@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:spending_planner/models/bar_chart_insights_data.dart';
-import 'package:spending_planner/widgets/bar_insight_card.dart';
+
+import '../models/bar_chart_insights_data.dart';
+import 'chart_bar.dart';
 
 class BarChartCard extends StatelessWidget {
   const BarChartCard({
     Key? key,
     required this.data,
+    required this.expanded,
   }) : super(key: key);
 
   final List<BarChartInsightsData> data;
+  final bool expanded;
 
   double calculateHeightFactor(double currentValue) {
     if (currentValue == 0) return currentValue;
@@ -22,25 +25,46 @@ class BarChartCard extends StatelessWidget {
     return double.parse(heightFactor.toStringAsFixed(2));
   }
 
-  List<Widget> _buildChartBars() {
+  List<Widget> _buildChartBars(bool isExpanded) {
     List<Widget> bars = [];
     data.forEach((e) {
       var heightFactor = calculateHeightFactor(e.value);
-      bars.add(BarInsightCard(heightFactor: heightFactor, label: e.label));
+      if (!isExpanded) {
+        bars.add(ChartBar(
+          heightFactor: heightFactor,
+          label: e.label,
+          value: e.value,
+          vertical: true,
+        ));
+      } else {
+        bars.add(ChartBar(
+          heightFactor: heightFactor,
+          label: e.label,
+          value: e.value,
+          vertical: false,
+        ));
+      }
     });
     return bars;
   }
 
+  Widget _buildHorizontalChart() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      crossAxisAlignment: CrossAxisAlignment.end,
+      children: _buildChartBars(false),
+    );
+  }
+
+  Widget _buildExpandedChart() {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: _buildChartBars(true),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: 125,
-      width: double.infinity,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.end,
-        children: _buildChartBars(),
-      ),
-    );
+    return expanded ? _buildExpandedChart() : _buildHorizontalChart();
   }
 }
