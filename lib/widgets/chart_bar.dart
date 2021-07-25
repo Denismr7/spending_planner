@@ -48,46 +48,49 @@ class ChartBar extends StatelessWidget {
   }
 
   Widget buildHorizontalBar(String currency) {
-    return Row(
-      children: [
-        SizedBox(
-          width: 80,
-          child: FittedBox(
-            fit: BoxFit.scaleDown,
-            alignment: Alignment.bottomLeft,
-            child: Text(
-              label,
-              style: TextStyle(
-                color: Colors.white,
-              ),
-            ),
-          ),
-        ),
-        const SizedBox(width: 10),
-        Expanded(
-          child: FractionallySizedBox(
-            widthFactor: heightFactor,
-            alignment: Alignment.bottomLeft,
-            child: Container(
-              height: 20,
-              decoration: BoxDecoration(
-                borderRadius: const BorderRadius.all(
-                  const Radius.circular(40),
+    return Container(
+      margin: const EdgeInsets.only(bottom: 8),
+      child: Row(
+        children: [
+          SizedBox(
+            width: 80,
+            child: FittedBox(
+              fit: BoxFit.scaleDown,
+              alignment: Alignment.bottomLeft,
+              child: Text(
+                label,
+                style: TextStyle(
+                  color: Colors.white,
                 ),
-                color: Colors.white,
               ),
-              child: null,
             ),
           ),
-        ),
-        const SizedBox(width: 10),
-        Text(
-          value.toStringAsFixed(2) + " " + currency,
-          style: TextStyle(
-            color: Colors.white,
+          const SizedBox(width: 10),
+          Expanded(
+            child: FractionallySizedBox(
+              widthFactor: heightFactor,
+              alignment: Alignment.bottomLeft,
+              child: Container(
+                height: 20,
+                decoration: BoxDecoration(
+                  borderRadius: const BorderRadius.all(
+                    const Radius.circular(40),
+                  ),
+                  color: Colors.white,
+                ),
+                child: null,
+              ),
+            ),
           ),
-        ),
-      ],
+          const SizedBox(width: 10),
+          Text(
+            value.toStringAsFixed(2) + " " + currency,
+            style: TextStyle(
+              color: Colors.white,
+            ),
+          ),
+        ],
+      ),
     );
   }
 
