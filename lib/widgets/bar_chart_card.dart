@@ -57,9 +57,11 @@ class BarChartCard extends StatelessWidget {
   }
 
   Widget _buildExpandedChart() {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      children: _buildChartBars(true),
+    return SingleChildScrollView(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: _buildChartBars(true),
+      ),
     );
   }
 
