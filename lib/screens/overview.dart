@@ -98,6 +98,7 @@ class _OverviewScreenState extends State<OverviewScreen> {
                     'Recent transactions',
                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.w300),
                   ),
+                  // TODO: View transactions by categories
                   TransactionList(
                     _fetchedTransactions,
                     () => _getTransactions(user.currentUser!.uid, 30, true),

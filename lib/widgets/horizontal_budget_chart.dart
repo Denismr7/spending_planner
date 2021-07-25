@@ -52,6 +52,9 @@ class HorizontalBudgetChart extends StatelessWidget {
                         Text(
                           '${totalSpent.toStringAsFixed(2)} $currency',
                           textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: Theme.of(context).backgroundColor,
+                          ),
                         ),
                       ],
                     );

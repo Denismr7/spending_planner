@@ -114,9 +114,15 @@ class _InsightsListState extends State<InsightsList> {
       monthTotal += value;
       _currentMonthSpending.add(BarChartInsightsData(label: key, value: value));
     });
-    _estimatedMonthExpense = valuesInWeeks.keys.length > 0
-        ? monthTotal / valuesInWeeks.keys.length
-        : 0;
+    _estimatedMonthExpense =
+        valuesInWeeks.keys.length > 0 ? _calculateMonthEstimate(monthTotal) : 0;
+  }
+
+  double _calculateMonthEstimate(double monthTotalExpenses) {
+    double expensePerDay = monthTotalExpenses / _currentDate.day;
+    int daysInMonth =
+        DateTime(_currentDate.year, _currentDate.month + 1, 0).day;
+    return expensePerDay * daysInMonth;
   }
 
   Map<String, double> _splitMonthInWeeksWithAmounts(
