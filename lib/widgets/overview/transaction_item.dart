@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
-import '../models/category.dart';
-import '../models/user.dart';
-import '../providers/user.dart';
+import '../../models/category.dart';
+import '../../models/user.dart';
+import '../../providers/user.dart';
 import 'transaction_options_sheet.dart';
 
 class TransactionItem extends StatelessWidget {
@@ -37,7 +37,9 @@ class TransactionItem extends StatelessWidget {
       onLongPress: () {
         showModalBottomSheet(
           shape: const RoundedRectangleBorder(
-            borderRadius: const BorderRadius.vertical(top: Radius.circular(8)),
+            borderRadius: const BorderRadius.vertical(
+              top: const Radius.circular(8),
+            ),
           ),
           context: context,
           builder: (ctx) => TransactionOptionsSheet(id),

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 class Category {
   final String id;
   final String name;
@@ -17,6 +19,16 @@ class Category {
       name: json['name'],
       categoryType: parseCategoryType(json['categoryType']),
     );
+  }
+
+  static List<Category> parseJsonCategories(String jsonData) {
+    List<Category> parsedList = [];
+    List<dynamic> parsedJson = jsonDecode(jsonData);
+    parsedJson.forEach((element) {
+      parsedList.add(Category.fromJson(element));
+    });
+
+    return parsedList;
   }
 
   // Firebase can't store enums so we store the value of the enum

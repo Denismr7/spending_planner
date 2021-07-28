@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 
 import 'edit_category_form.dart';
 import 'setting_option.dart';
-import '../models/category.dart';
+import '../../models/category.dart';
 
 class CategoriesEdit extends StatefulWidget {
   const CategoriesEdit(this.jsonData, {required this.onChange});
@@ -34,7 +34,8 @@ class _CategoriesEditState extends State<CategoriesEdit> {
         .indexWhere((category) => category.id == selectedCategory?.id);
     await showModalBottomSheet(
       shape: const RoundedRectangleBorder(
-        borderRadius: const BorderRadius.vertical(top: Radius.circular(8)),
+        borderRadius:
+            const BorderRadius.vertical(top: const Radius.circular(8)),
       ),
       isScrollControlled: true,
       context: context,

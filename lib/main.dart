@@ -98,7 +98,8 @@ class _MyAppState extends State<MyApp> {
               title: 'Spending Planner',
               theme: ThemeData(
                 primarySwatch: Colors.green,
-                accentColor: Colors.deepPurple,
+                accentColor: const Color.fromRGBO(64, 74, 60, 1),
+                cardColor: const Color.fromRGBO(0, 173, 88, 1),
               ),
               home: _buildHome(snapshot),
               routes: {

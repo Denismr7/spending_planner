@@ -1,16 +1,14 @@
-import 'dart:convert';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../helpers/transactions.dart';
-import 'datepicker_field.dart';
-import 'modal_bottom_sheet_input.dart';
-import 'select_field.dart';
-import '../models/category.dart';
-import '../providers/user.dart';
-import '../models/user.dart';
+import '../../helpers/transactions.dart';
+import '../common/datepicker_field.dart';
+import '../common/modal_bottom_sheet_input.dart';
+import '../common/select_field.dart';
+import '../../models/category.dart';
+import '../../providers/user.dart';
+import '../../models/user.dart';
 
 class AddTransaction extends StatefulWidget {
   const AddTransaction();
@@ -30,20 +28,10 @@ class _AddTransactionState extends State<AddTransaction> {
   @override
   void initState() {
     super.initState();
-    _categories = _parseJsonCategories(
+    _categories = Category.parseJsonCategories(
         Provider.of<UserProvider>(context, listen: false)
             .getSettingValue(Setting.Categories));
     _createMapFromCategories(_categories);
-  }
-
-  List<Category> _parseJsonCategories(String jsonData) {
-    List<Category> parsedList = [];
-    List<dynamic> parsedJson = jsonDecode(jsonData);
-    parsedJson.forEach((element) {
-      parsedList.add(Category.fromJson(element));
-    });
-
-    return parsedList;
   }
 
   void _createMapFromCategories(List<Category> categories) {
@@ -141,7 +129,7 @@ class _AddTransactionState extends State<AddTransaction> {
                   style: ElevatedButton.styleFrom(
                     shape: const RoundedRectangleBorder(
                       borderRadius: const BorderRadius.all(
-                        Radius.circular(10),
+                        const Radius.circular(10),
                       ),
                     ),
                   ),

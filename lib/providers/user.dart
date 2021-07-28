@@ -17,7 +17,7 @@ class UserProvider extends ChangeNotifier {
     _user = User(id: id, login: email, name: name, settings: settings);
   }
 
-  dynamic getSettingValue(Setting key) {
+  String getSettingValue(Setting key) {
     return _user?.settings.firstWhere((setting) => setting.key == key).value ??
         null;
   }

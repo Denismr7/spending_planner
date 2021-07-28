@@ -3,15 +3,15 @@ import 'package:flutter/material.dart';
 
 import 'insights_screen.dart';
 import 'settings.dart';
-import '../widgets/action_button.dart';
-import '../widgets/expandable_fab.dart';
+import '../widgets/common/action_button.dart';
+import '../widgets/common/expandable_fab.dart';
 import 'error.dart';
 import 'loading.dart';
-import '../widgets/transaction_list.dart';
-import '../widgets/chart_overview.dart';
+import '../widgets/overview/transaction_list.dart';
+import '../widgets/overview/chart_overview.dart';
 import '../models/transaction.dart';
 import '../helpers/transactions.dart';
-import '../widgets/add_transaction.dart';
+import '../widgets/overview/add_transaction.dart';
 
 class OverviewScreen extends StatefulWidget {
   static const routeName = '/overview';
@@ -38,7 +38,8 @@ class _OverviewScreenState extends State<OverviewScreen> {
 
   Future<List<Transaction>> _getTransactions(String userId, int limit,
       [bool update = false]) async {
-    final data = await TransactionsHelper.searchUserTransactions(userId, limit);
+    final data = await TransactionsHelper.searchUserTransactions(
+        userId: userId, limit: limit);
     _fetchedTransactions = data;
     if (update) {
       setState(() {});
@@ -49,7 +50,9 @@ class _OverviewScreenState extends State<OverviewScreen> {
   void _showAddTransactionMBS(BuildContext context) {
     showModalBottomSheet(
       shape: const RoundedRectangleBorder(
-        borderRadius: const BorderRadius.vertical(top: Radius.circular(8)),
+        borderRadius: const BorderRadius.vertical(
+          top: const Radius.circular(8),
+        ),
       ),
       isScrollControlled: true,
       context: context,
@@ -95,6 +98,7 @@ class _OverviewScreenState extends State<OverviewScreen> {
                     'Recent transactions',
                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.w300),
                   ),
+                  // TODO: View transactions by categories
                   TransactionList(
                     _fetchedTransactions,
                     () => _getTransactions(user.currentUser!.uid, 30, true),

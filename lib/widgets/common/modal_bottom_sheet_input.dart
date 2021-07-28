@@ -81,7 +81,7 @@ class _ModalBottomSheetInputState extends State<ModalBottomSheetInput> {
         labelText: widget.labelText,
         border: OutlineInputBorder(
           borderRadius: const BorderRadius.all(
-            Radius.circular(10),
+            const Radius.circular(10),
           ),
         ),
       ),

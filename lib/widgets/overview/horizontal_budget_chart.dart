@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../models/user.dart';
-import '../providers/user.dart';
+import '../../models/user.dart';
+import '../../providers/user.dart';
 
 class HorizontalBudgetChart extends StatelessWidget {
   const HorizontalBudgetChart({
@@ -52,6 +52,9 @@ class HorizontalBudgetChart extends StatelessWidget {
                         Text(
                           '${totalSpent.toStringAsFixed(2)} $currency',
                           textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: Theme.of(context).backgroundColor,
+                          ),
                         ),
                       ],
                     );

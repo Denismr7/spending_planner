@@ -5,17 +5,32 @@ import '../models/transaction.dart' as m;
 
 class TransactionsHelper {
   static Future<List<m.Transaction>> searchUserTransactions(
-      String userId, int limit) async {
+      {required String userId,
+      int? limit,
+      DateTime? from,
+      DateTime? to}) async {
     FirebaseFirestore firestore = FirebaseFirestore.instance;
 
     try {
       // Fetch de collection
-      final collection = await firestore
+      var query = firestore
           .collection('transactions')
           .where('userId', isEqualTo: userId)
-          .orderBy('date', descending: true)
-          .limit(limit)
-          .get();
+          .orderBy('date', descending: true);
+
+      if (limit != null) {
+        query = query.limit(limit);
+      }
+      if (from != null) {
+        query = query.where('date',
+            isGreaterThanOrEqualTo: Timestamp.fromDate(from));
+      }
+      if (to != null) {
+        query =
+            query.where('date', isLessThanOrEqualTo: Timestamp.fromDate(to));
+      }
+
+      var collection = await query.get();
 
       // Transform into a list of transactions
       List<m.Transaction> transactions = [];
