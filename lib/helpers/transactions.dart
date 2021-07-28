@@ -4,11 +4,12 @@ import '../models/category.dart';
 import '../models/transaction.dart' as m;
 
 class TransactionsHelper {
-  static Future<List<m.Transaction>> searchUserTransactions(
-      {required String userId,
-      int? limit,
-      DateTime? from,
-      DateTime? to}) async {
+  static Future<List<m.Transaction>> searchUserTransactions({
+    required String userId,
+    int? limit,
+    DateTime? from,
+    DateTime? to,
+  }) async {
     FirebaseFirestore firestore = FirebaseFirestore.instance;
 
     try {

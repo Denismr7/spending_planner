@@ -109,18 +109,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             SettingOption(
-              label: 'Budget',
-              icon: Icons.warning_amber_rounded,
-              simpleInput: false,
-              initialValue: _userSettings[Setting.Budget],
-              setting: Setting.Budget,
-              onTapDetail: () => _openSettingDetail(Setting.Budget),
-              detailIcon: Icons.arrow_forward,
-            ),
-            const SizedBox(
-              height: 20,
-            ),
-            SettingOption(
               label: 'Currency',
               setting: Setting.Currency,
               icon: Icons.attach_money_rounded,
@@ -135,6 +123,20 @@ class _SettingsScreenState extends State<SettingsScreen> {
               height: 20,
             ),
             SettingOption(
+              key: UniqueKey(),
+              label: 'Budget',
+              icon: Icons.warning_amber_rounded,
+              simpleInput: false,
+              initialValue: _userSettings[Setting.Budget],
+              setting: Setting.Budget,
+              onTapDetail: () => _openSettingDetail(Setting.Budget),
+              detailIcon: Icons.arrow_forward,
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            SettingOption(
+              key: UniqueKey(),
               label: 'Categories',
               icon: Icons.category_rounded,
               simpleInput: false,

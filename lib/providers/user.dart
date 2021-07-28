@@ -3,7 +3,9 @@ import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:flutter/material.dart';
+import 'package:spending_planner/helpers/transactions.dart';
 import 'package:spending_planner/models/budget.dart';
+import 'package:spending_planner/models/category.dart';
 
 import '../models/user.dart';
 
@@ -36,6 +38,34 @@ class UserProvider extends ChangeNotifier {
   Budget getBudget() {
     var data = getSettingValue(Setting.Budget);
     return Budget.fromJson(jsonDecode(data));
+  }
+
+  Future<double> calculateBudgetLimit(int newPercentage) async {
+    try {
+      var user = auth.FirebaseAuth.instance;
+      var currentDate = DateTime.now();
+      var startMonth = DateTime(currentDate.year, currentDate.month, 1);
+      var endMonth = DateTime(currentDate.year, currentDate.month + 1, 0);
+
+      var transactions = await TransactionsHelper.searchUserTransactions(
+        userId: user.currentUser!.uid,
+        from: startMonth,
+        to: endMonth,
+      );
+      var incomesAmount = 0.0;
+      transactions.forEach((element) {
+        if (element.categoryType == CategoryType.Incomes) {
+          incomesAmount += element.amount;
+        }
+      });
+
+      var budget = (incomesAmount * (newPercentage / 100)).toStringAsFixed(2);
+      print('SPLAN.UserProvider() SmartBudget enabled, new budget $budget');
+      return double.parse(budget);
+    } catch (e) {
+      print('SPLAN.UserProvider() Error $e');
+      throw e;
+    }
   }
 
   Future<void> updateSettingValue(Map<Setting, dynamic> newSettings) async {

@@ -13,7 +13,8 @@ class SettingOption extends StatefulWidget {
     this.inputType,
     this.onTapDetail,
     this.detailIcon,
-  });
+    Key? key,
+  }) : super(key: key);
 
   final String label;
   final IconData icon;
