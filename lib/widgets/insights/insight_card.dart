@@ -10,10 +10,14 @@ class InsightCard extends StatefulWidget {
     required this.isExpandable,
     required this.chartData,
     this.subtitle,
+    this.growth,
+    this.growthText,
   }) : super(key: key);
 
   final String title;
   final String? subtitle;
+  final double? growth;
+  final String? growthText;
   final bool isExpandable;
   final List<BarChartInsightsData> chartData;
 
@@ -27,7 +31,7 @@ class _InsightCardState extends State<InsightCard> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: _expanded ? 400 : 220,
+      height: _expanded ? 400 : 240,
       width: 350,
       decoration: BoxDecoration(
         borderRadius: const BorderRadius.all(
@@ -73,13 +77,36 @@ class _InsightCardState extends State<InsightCard> {
                   ],
                 ),
                 if (widget.subtitle != null)
-                  Text(
-                    widget.subtitle!,
-                    style: const TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w300,
-                      color: Colors.white,
+                  Container(
+                    margin: const EdgeInsets.only(bottom: 3),
+                    child: Text(
+                      widget.subtitle!,
+                      style: const TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w300,
+                        color: Colors.white,
+                      ),
                     ),
+                  ),
+                if (widget.growth != null)
+                  Row(
+                    children: [
+                      Icon(
+                        widget.growth! < 0
+                            ? Icons.arrow_drop_down_rounded
+                            : Icons.arrow_drop_up_rounded,
+                        size: 22,
+                        color: widget.growth! < 0 ? Colors.red : Colors.white,
+                      ),
+                      Text(
+                        widget.growthText!,
+                        style: const TextStyle(
+                          fontSize: 13,
+                          fontWeight: FontWeight.w300,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ],
                   ),
               ],
             ),

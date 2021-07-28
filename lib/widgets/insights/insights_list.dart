@@ -20,13 +20,22 @@ class InsightsList extends StatefulWidget {
 }
 
 class _InsightsListState extends State<InsightsList> {
+  // Chart data
   List<BarChartInsightsData> _currentMonthSpending = [];
   List<BarChartInsightsData> _yearSpending = [];
   List<BarChartInsightsData> _categoriesSpending = [];
+
+  // Common data
   List<Transaction> _yearTransactions = [];
+  var _currentDate = DateTime.now();
+
+  // Variables displayed in charts
   double? _estimatedMonthExpense;
   double? _monthAverageExpense;
-  var _currentDate = DateTime.now();
+  double? _weekGrowth;
+  String? _weekGrowthText;
+  double? _monthGrowth;
+  String? _monthGrowthText;
 
   Future<void> _fetchYearTransactions() async {
     var user = FirebaseAuth.instance;
@@ -48,21 +57,26 @@ class _InsightsListState extends State<InsightsList> {
       double currentMonthExpenses = 0;
       var monthExpenses =
           yearExpenses.where((element) => element.date.month == i).toList();
+      monthExpenses
+          .forEach((element) => currentMonthExpenses += element.amount);
 
       // Current month charts data
       if (i == _currentDate.month) {
         _calculateMonthSpending(monthExpenses);
         _calculateTopCategories(monthExpenses);
+        var prevMonthExpenses = 0.0;
+        yearExpenses
+            .where((element) => element.date.month == i - 1)
+            .forEach((element) => prevMonthExpenses += element.amount);
+        _calculateMonthGrowth(currentMonthExpenses, prevMonthExpenses);
       }
-      monthExpenses
-          .forEach((element) => currentMonthExpenses += element.amount);
 
       // Create label with the first letter of the current month
       var currentMonthDate = DateTime(_currentDate.year, i);
-      var firstLetterMonth = DateFormat.MMMM().format(currentMonthDate);
+      var monthName = DateFormat.MMMM().format(currentMonthDate);
       _yearSpending.add(
         BarChartInsightsData(
-            label: firstLetterMonth,
+            label: monthName,
             value: currentMonthExpenses,
             isCurrentDate: i == _currentDate.month),
       );
@@ -78,6 +92,21 @@ class _InsightsListState extends State<InsightsList> {
       }
     });
     _monthAverageExpense = totalMonths > 0 ? totalSpent / totalMonths : 0;
+  }
+
+  void _calculateMonthGrowth(
+    double currentMonthExpenses,
+    double prevMonthExpenses,
+  ) {
+    if (prevMonthExpenses == 0) {
+      print('Previous month expenses is 0. Skipping calculation');
+      return;
+    }
+    double growth =
+        ((currentMonthExpenses - prevMonthExpenses) / prevMonthExpenses) * 100;
+    _monthGrowth = double.parse(growth.toStringAsFixed(2));
+    String incrOrDecr = growth < 0 ? "less" : "more";
+    _monthGrowthText = '$_monthGrowth% $incrOrDecr than prev. month';
   }
 
   void _calculateTopCategories(List<Transaction> monthTransactions) {
@@ -117,26 +146,43 @@ class _InsightsListState extends State<InsightsList> {
     int lastWeekNumber = int.parse(valuesInWeeks.keys.last.substring(1));
     valuesInWeeks.forEach((key, value) {
       monthTotal += value;
+      bool isCurrentWeek = _dateIsInCurrentWeek(
+        _currentDate,
+        int.parse(key.substring(1)),
+        lastWeekNumber,
+      );
       _currentMonthSpending.add(
         BarChartInsightsData(
           label: key,
           value: value,
-          isCurrentDate: _dateIsInCurrentWeek(
-            _currentDate,
-            int.parse(key.substring(1)),
-            lastWeekNumber,
-          ),
+          isCurrentDate: isCurrentWeek,
         ),
       );
+
+      if (isCurrentWeek && key != "W1") {
+        String prevWeekKey = "W" + (int.parse(key.substring(1)) - 1).toString();
+        _calculateWeekGrowth(value, valuesInWeeks[prevWeekKey] ?? 0);
+      }
     });
     _estimatedMonthExpense =
         valuesInWeeks.keys.length > 0 ? _calculateMonthEstimate(monthTotal) : 0;
   }
 
+  void _calculateWeekGrowth(double currentWeek, double prevWeek) {
+    if (prevWeek == 0) {
+      print('Prev week = 0. Skipping calculation');
+      return;
+    }
+
+    double growth = ((currentWeek - prevWeek) / prevWeek) * 100;
+    _weekGrowth = double.parse(growth.toStringAsFixed(2));
+    String incrOrDecr = growth < 0 ? "less" : "more";
+    _weekGrowthText = '$_weekGrowth% $incrOrDecr than prev. week';
+  }
+
   bool _dateIsInCurrentWeek(DateTime currentDate, int week, int totalWeeks) {
     int currentWeek = (_currentDate.day / 7).round();
     currentWeek = currentWeek > totalWeeks ? currentWeek-- : currentWeek;
-    print('Is current date? :' + (currentWeek == week).toString());
     return currentWeek == week;
   }
 
@@ -216,6 +262,8 @@ class _InsightsListState extends State<InsightsList> {
                 'Estimated expense: ${_estimatedMonthExpense?.toStringAsFixed(2)} $currency',
             isExpandable: false,
             chartData: _currentMonthSpending,
+            growth: _weekGrowth,
+            growthText: _weekGrowthText,
           ),
           InsightCard(
             title: 'This year',
@@ -223,6 +271,8 @@ class _InsightsListState extends State<InsightsList> {
                 'On average you have spent ${_monthAverageExpense?.toStringAsFixed(2)} $currency per month',
             isExpandable: true,
             chartData: _yearSpending,
+            growth: _monthGrowth,
+            growthText: _monthGrowthText,
           ),
           InsightCard(
             title: 'Top categories',
