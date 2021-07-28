@@ -31,7 +31,7 @@ class ChartOverview extends StatelessWidget {
     final budget = Provider.of<UserProvider>(context, listen: true)
         .getSettingValueAsDouble(Setting.Budget);
     final currency = Provider.of<UserProvider>(context, listen: true)
-        .getSettingValue(Setting.Currency);
+        .getSettingValueAsString(Setting.Currency);
     final spentPercentage = totalSpending / budget;
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 10),

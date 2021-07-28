@@ -31,8 +31,8 @@ class TransactionItem extends StatelessWidget {
   Widget build(BuildContext context) {
     var isIncome = categoryType == CategoryType.Incomes ? true : false;
     var symbol = isIncome ? "+" : "-";
-    final currency =
-        Provider.of<UserProvider>(context).getSettingValue(Setting.Currency);
+    final currency = Provider.of<UserProvider>(context)
+        .getSettingValueAsString(Setting.Currency);
     return GestureDetector(
       onLongPress: () {
         showModalBottomSheet(

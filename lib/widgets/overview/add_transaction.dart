@@ -30,7 +30,7 @@ class _AddTransactionState extends State<AddTransaction> {
     super.initState();
     _categories = Category.parseJsonCategories(
         Provider.of<UserProvider>(context, listen: false)
-            .getSettingValue(Setting.Categories));
+            .getSettingValueAsString(Setting.Categories));
     _createMapFromCategories(_categories);
   }
 

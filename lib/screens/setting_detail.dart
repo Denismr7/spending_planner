@@ -42,7 +42,7 @@ class _SettingDetailScreenState extends State<SettingDetailScreen> {
 
   String _getCategories() {
     String categories = Provider.of<UserProvider>(context, listen: false)
-        .getSettingValue(Setting.Categories);
+        .getSettingValueAsString(Setting.Categories);
     return categories;
   }
 

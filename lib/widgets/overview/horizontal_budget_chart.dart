@@ -18,7 +18,7 @@ class HorizontalBudgetChart extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final currency = Provider.of<UserProvider>(context, listen: false)
-        .getSettingValue(Setting.Currency);
+        .getSettingValueAsString(Setting.Currency);
     return Stack(
       children: [
         FractionallySizedBox(

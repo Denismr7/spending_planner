@@ -17,13 +17,17 @@ class UserProvider extends ChangeNotifier {
     _user = User(id: id, login: email, name: name, settings: settings);
   }
 
-  String getSettingValue(Setting key) {
+  dynamic getSettingValue(Setting key) {
     return _user?.settings.firstWhere((setting) => setting.key == key).value ??
-        null;
+        "";
+  }
+
+  String getSettingValueAsString(Setting key) {
+    return getSettingValue(key).toString();
   }
 
   double getSettingValueAsDouble(Setting key) {
-    return double.parse(getSettingValue(key));
+    return double.parse(getSettingValueAsString(key));
   }
 
   Future<void> updateSettingValue(Map<Setting, dynamic> newSettings) async {

@@ -112,7 +112,7 @@ class _InsightsListState extends State<InsightsList> {
   void _calculateTopCategories(List<Transaction> monthTransactions) {
     // Get user expenses categories
     String json = Provider.of<UserProvider>(context, listen: false)
-        .getSettingValue(Setting.Categories);
+        .getSettingValueAsString(Setting.Categories);
     List<Category> categories = Category.parseJsonCategories(json)
         .where((element) => element.categoryType == CategoryType.Expenses)
         .toList();
@@ -251,7 +251,7 @@ class _InsightsListState extends State<InsightsList> {
   @override
   Widget build(BuildContext context) {
     var currency = Provider.of<UserProvider>(context, listen: false)
-        .getSettingValue(Setting.Currency);
+        .getSettingValueAsString(Setting.Currency);
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
       child: ListView(
