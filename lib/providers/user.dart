@@ -1,6 +1,9 @@
+import 'dart:convert';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:flutter/material.dart';
+import 'package:spending_planner/models/budget.dart';
 
 import '../models/user.dart';
 
@@ -28,6 +31,11 @@ class UserProvider extends ChangeNotifier {
 
   double getSettingValueAsDouble(Setting key) {
     return double.parse(getSettingValueAsString(key));
+  }
+
+  Budget getBudget() {
+    var data = getSettingValue(Setting.Budget);
+    return Budget.fromJson(jsonDecode(data));
   }
 
   Future<void> updateSettingValue(Map<Setting, dynamic> newSettings) async {

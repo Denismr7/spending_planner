@@ -84,7 +84,7 @@ class _SettingOptionState extends State<SettingOption> {
   void initState() {
     super.initState();
     if (widget.initialValue != null && widget.simpleInput) {
-      _controller.text = widget.initialValue;
+      _controller.text = widget.initialValue.toString();
     }
   }
 

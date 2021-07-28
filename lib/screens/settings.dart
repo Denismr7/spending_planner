@@ -111,13 +111,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
             SettingOption(
               label: 'Budget',
               icon: Icons.warning_amber_rounded,
-              simpleInput: true,
+              simpleInput: false,
               initialValue: _userSettings[Setting.Budget],
-              inputType: TextInputType.number,
               setting: Setting.Budget,
-              onChanged: (val) {
-                _onChange(Setting.Budget, val);
-              },
+              onTapDetail: () => _openSettingDetail(Setting.Budget),
+              detailIcon: Icons.arrow_forward,
             ),
             const SizedBox(
               height: 20,

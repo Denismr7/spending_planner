@@ -28,11 +28,10 @@ class ChartOverview extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final totalSpending = getTotalSpending(monthTransactions);
-    final budget = Provider.of<UserProvider>(context, listen: true)
-        .getSettingValueAsDouble(Setting.Budget);
+    final budget = Provider.of<UserProvider>(context, listen: true).getBudget();
     final currency = Provider.of<UserProvider>(context, listen: true)
         .getSettingValueAsString(Setting.Currency);
-    final spentPercentage = totalSpending / budget;
+    final spentPercentage = totalSpending / budget.limit;
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 10),
       padding: const EdgeInsets.all(8.0),
@@ -55,7 +54,7 @@ class ChartOverview extends StatelessWidget {
             width: double.infinity,
             padding: const EdgeInsets.symmetric(vertical: 5),
             child: Text(
-              '${budget.toStringAsFixed(2)} $currency',
+              '${budget.limit.toStringAsFixed(2)} $currency',
               textAlign: TextAlign.right,
             ),
           ),

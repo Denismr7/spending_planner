@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:spending_planner/widgets/settings/budget_edit.dart';
 
 import '../providers/user.dart';
 import '../widgets/settings/categories_edit.dart';
@@ -25,6 +26,11 @@ class _SettingDetailScreenState extends State<SettingDetailScreen> {
           _jsonData!,
           onChange: _onChangeCategories,
         );
+      case Setting.Budget:
+        return BudgetEdit(
+          _jsonData!,
+          onChange: (v) {},
+        );
       default:
         return const Text('Invalid setting');
     }
@@ -40,22 +46,16 @@ class _SettingDetailScreenState extends State<SettingDetailScreen> {
     Navigator.of(context).pop(_jsonData);
   }
 
-  String _getCategories() {
-    String categories = Provider.of<UserProvider>(context, listen: false)
-        .getSettingValueAsString(Setting.Categories);
-    return categories;
+  String _getJsonData(Setting setting) {
+    String jsonData = Provider.of<UserProvider>(context, listen: false)
+        .getSettingValueAsString(setting);
+    return jsonData;
   }
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    switch (widget.setting) {
-      case Setting.Categories:
-        _jsonData = _getCategories();
-        break;
-      default:
-        _jsonData = "";
-    }
+    _jsonData = _getJsonData(widget.setting);
   }
 
   @override
