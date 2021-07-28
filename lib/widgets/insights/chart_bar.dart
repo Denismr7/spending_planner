@@ -23,22 +23,10 @@ class ChartBar extends StatelessWidget {
   Widget buildVerticalBar() {
     return Column(
       children: [
-        Expanded(
-          child: FractionallySizedBox(
-            heightFactor: heightFactor,
-            alignment: Alignment.bottomLeft,
-            child: Container(
-              width: 15,
-              decoration: BoxDecoration(
-                borderRadius: const BorderRadius.all(
-                  const Radius.circular(40),
-                ),
-                color: isCurrentDate ? Colors.white38 : Colors.white,
-                border: isCurrentDate ? Border.all(color: Colors.white) : null,
-              ),
-              child: null,
-            ),
-          ),
+        Bar(
+          heightFactor: heightFactor,
+          isCurrentDate: isCurrentDate,
+          isVertical: true,
         ),
         Text(
           label.substring(0, 2),
@@ -69,21 +57,10 @@ class ChartBar extends StatelessWidget {
             ),
           ),
           const SizedBox(width: 10),
-          Expanded(
-            child: FractionallySizedBox(
-              widthFactor: heightFactor,
-              alignment: Alignment.bottomLeft,
-              child: Container(
-                height: 20,
-                decoration: BoxDecoration(
-                  borderRadius: const BorderRadius.all(
-                    const Radius.circular(40),
-                  ),
-                  color: Colors.white,
-                ),
-                child: null,
-              ),
-            ),
+          Bar(
+            heightFactor: heightFactor,
+            isCurrentDate: isCurrentDate,
+            isVertical: false,
           ),
           const SizedBox(width: 10),
           Text(
@@ -102,5 +79,41 @@ class ChartBar extends StatelessWidget {
     var currency = Provider.of<UserProvider>(context, listen: false)
         .getSettingValue(Setting.Currency);
     return vertical ? buildVerticalBar() : buildHorizontalBar(currency);
+  }
+}
+
+class Bar extends StatelessWidget {
+  const Bar({
+    Key? key,
+    required this.heightFactor,
+    required this.isCurrentDate,
+    required this.isVertical,
+  }) : super(key: key);
+
+  final double heightFactor;
+  final bool isCurrentDate;
+  final bool isVertical;
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      child: FractionallySizedBox(
+        heightFactor: isVertical ? heightFactor : null,
+        widthFactor: !isVertical ? heightFactor : null,
+        alignment: Alignment.bottomLeft,
+        child: Container(
+          width: isVertical ? 15 : null,
+          height: !isVertical ? 20 : null,
+          decoration: BoxDecoration(
+            borderRadius: const BorderRadius.all(
+              const Radius.circular(40),
+            ),
+            color: isCurrentDate ? Colors.white38 : Colors.white,
+            border: isCurrentDate ? Border.all(color: Colors.white) : null,
+          ),
+          child: null,
+        ),
+      ),
+    );
   }
 }
