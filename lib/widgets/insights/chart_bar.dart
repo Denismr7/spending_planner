@@ -20,6 +20,12 @@ class ChartBar extends StatelessWidget {
   final bool vertical;
   final bool isCurrentDate;
 
+  String truncateLabelIfRequired(String label, int maxLength) {
+    return label.length > maxLength
+        ? '${label.substring(0, maxLength)}...'
+        : label;
+  }
+
   Widget buildVerticalBar() {
     return Column(
       children: [
@@ -49,7 +55,7 @@ class ChartBar extends StatelessWidget {
               fit: BoxFit.scaleDown,
               alignment: Alignment.bottomLeft,
               child: Text(
-                label,
+                truncateLabelIfRequired(label, 13),
                 style: TextStyle(
                   color: Colors.white,
                 ),
