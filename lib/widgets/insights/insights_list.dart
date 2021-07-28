@@ -3,12 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
-import '../helpers/transactions.dart';
-import '../models/bar_chart_insights_data.dart';
-import '../models/category.dart';
-import '../models/transaction.dart';
-import '../models/user.dart';
-import '../providers/user.dart';
+import '../../helpers/transactions.dart';
+import '../../models/bar_chart_insights_data.dart';
+import '../../models/category.dart';
+import '../../models/transaction.dart';
+import '../../models/user.dart';
+import '../../providers/user.dart';
 
 import 'insight_card.dart';
 

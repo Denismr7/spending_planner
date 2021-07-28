@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 
 import 'edit_category_form.dart';
 import 'setting_option.dart';
-import '../models/category.dart';
+import '../../models/category.dart';
 
 class CategoriesEdit extends StatefulWidget {
   const CategoriesEdit(this.jsonData, {required this.onChange});

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:spending_planner/widgets/rounded_form_field.dart';
+import 'package:spending_planner/widgets/common/rounded_form_field.dart';
 
-import '../models/rounded_buttons.dart';
-import 'rounded_button.dart';
-import '../models/auth_field.dart';
+import '../../models/rounded_buttons.dart';
+import '../common/rounded_button.dart';
+import '../../models/auth_field.dart';
 
 class AuthForm extends StatefulWidget {
   final bool isLogin;

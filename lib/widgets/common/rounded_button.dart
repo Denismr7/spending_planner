@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../models/rounded_buttons.dart';
+import '../../models/rounded_buttons.dart';
 
 class RoundedButton extends StatelessWidget {
   const RoundedButton({

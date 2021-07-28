@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../models/bar_chart_insights_data.dart';
+import '../../models/bar_chart_insights_data.dart';
 import 'bar_chart_card.dart';
 
 class InsightCard extends StatefulWidget {

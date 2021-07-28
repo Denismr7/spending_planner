@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../models/category.dart';
-import '../models/transaction.dart';
-import '../providers/user.dart';
+import '../../models/category.dart';
+import '../../models/transaction.dart';
+import '../../providers/user.dart';
 import 'horizontal_budget_chart.dart';
-import '../models/user.dart';
+import '../../models/user.dart';
 
 class ChartOverview extends StatelessWidget {
   final List<Transaction> monthTransactions;

@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 
 import '../models/user.dart';
 import '../providers/user.dart';
-import '../widgets/setting_option.dart';
+import '../widgets/settings/setting_option.dart';
 import 'setting_detail.dart';
 
 class SettingsScreen extends StatefulWidget {

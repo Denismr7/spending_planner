@@ -3,15 +3,15 @@ import 'package:flutter/material.dart';
 
 import 'insights_screen.dart';
 import 'settings.dart';
-import '../widgets/action_button.dart';
-import '../widgets/expandable_fab.dart';
+import '../widgets/common/action_button.dart';
+import '../widgets/common/expandable_fab.dart';
 import 'error.dart';
 import 'loading.dart';
-import '../widgets/transaction_list.dart';
-import '../widgets/chart_overview.dart';
+import '../widgets/overview/transaction_list.dart';
+import '../widgets/overview/chart_overview.dart';
 import '../models/transaction.dart';
 import '../helpers/transactions.dart';
-import '../widgets/add_transaction.dart';
+import '../widgets/overview/add_transaction.dart';
 
 class OverviewScreen extends StatefulWidget {
   static const routeName = '/overview';

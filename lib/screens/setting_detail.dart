@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../providers/user.dart';
-import '../widgets/categories_edit.dart';
+import '../widgets/settings/categories_edit.dart';
 import '../models/user.dart';
 
 class SettingDetailScreen extends StatefulWidget {

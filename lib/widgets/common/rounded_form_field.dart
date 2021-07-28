@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../models/auth_field.dart';
+import '../../models/auth_field.dart';
 
 class RoundedFormField extends StatefulWidget {
   const RoundedFormField({

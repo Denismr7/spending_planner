@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:spending_planner/helpers/transactions.dart';
-import 'package:spending_planner/widgets/icon_option.dart';
+import 'package:spending_planner/widgets/common/icon_option.dart';
 
 class TransactionOptionsSheet extends StatefulWidget {
   const TransactionOptionsSheet(this.transactionId);
