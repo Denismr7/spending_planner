@@ -11,12 +11,14 @@ class ChartBar extends StatelessWidget {
     required this.label,
     required this.value,
     required this.vertical,
+    this.isCurrentDate = false,
   }) : super(key: key);
 
   final double heightFactor;
   final String label;
   final double value;
   final bool vertical;
+  final bool isCurrentDate;
 
   Widget buildVerticalBar() {
     return Column(
@@ -31,7 +33,8 @@ class ChartBar extends StatelessWidget {
                 borderRadius: const BorderRadius.all(
                   const Radius.circular(40),
                 ),
-                color: Colors.white,
+                color: isCurrentDate ? Colors.white38 : Colors.white,
+                border: isCurrentDate ? Border.all(color: Colors.white) : null,
               ),
               child: null,
             ),

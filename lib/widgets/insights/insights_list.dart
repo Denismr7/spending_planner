@@ -62,7 +62,9 @@ class _InsightsListState extends State<InsightsList> {
       var firstLetterMonth = DateFormat.MMMM().format(currentMonthDate);
       _yearSpending.add(
         BarChartInsightsData(
-            label: firstLetterMonth, value: currentMonthExpenses),
+            label: firstLetterMonth,
+            value: currentMonthExpenses,
+            isCurrentDate: i == _currentDate.month),
       );
     }
 
@@ -98,7 +100,9 @@ class _InsightsListState extends State<InsightsList> {
 
       // Create chart data
       _categoriesSpending.add(BarChartInsightsData(
-          label: currentCategory.name, value: categoryAmount));
+        label: currentCategory.name,
+        value: categoryAmount,
+      ));
     }
 
     _categoriesSpending.sort((a, b) => b.value.compareTo(a.value));
@@ -110,12 +114,30 @@ class _InsightsListState extends State<InsightsList> {
 
     // Transform map and get estimated
     double monthTotal = 0;
+    int lastWeekNumber = int.parse(valuesInWeeks.keys.last.substring(1));
     valuesInWeeks.forEach((key, value) {
       monthTotal += value;
-      _currentMonthSpending.add(BarChartInsightsData(label: key, value: value));
+      _currentMonthSpending.add(
+        BarChartInsightsData(
+          label: key,
+          value: value,
+          isCurrentDate: _dateIsInCurrentWeek(
+            _currentDate,
+            int.parse(key.substring(1)),
+            lastWeekNumber,
+          ),
+        ),
+      );
     });
     _estimatedMonthExpense =
         valuesInWeeks.keys.length > 0 ? _calculateMonthEstimate(monthTotal) : 0;
+  }
+
+  bool _dateIsInCurrentWeek(DateTime currentDate, int week, int totalWeeks) {
+    int currentWeek = (_currentDate.day / 7).round();
+    currentWeek = currentWeek > totalWeeks ? currentWeek-- : currentWeek;
+    print('Is current date? :' + (currentWeek == week).toString());
+    return currentWeek == week;
   }
 
   double _calculateMonthEstimate(double monthTotalExpenses) {
@@ -185,7 +207,7 @@ class _InsightsListState extends State<InsightsList> {
     var currency = Provider.of<UserProvider>(context, listen: false)
         .getSettingValue(Setting.Currency);
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
       child: ListView(
         children: [
           InsightCard(

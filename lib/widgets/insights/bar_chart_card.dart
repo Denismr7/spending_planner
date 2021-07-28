@@ -29,21 +29,13 @@ class BarChartCard extends StatelessWidget {
     List<Widget> bars = [];
     data.forEach((e) {
       var heightFactor = calculateHeightFactor(e.value);
-      if (!isExpanded) {
-        bars.add(ChartBar(
-          heightFactor: heightFactor,
-          label: e.label,
-          value: e.value,
-          vertical: true,
-        ));
-      } else {
-        bars.add(ChartBar(
-          heightFactor: heightFactor,
-          label: e.label,
-          value: e.value,
-          vertical: false,
-        ));
-      }
+      bars.add(ChartBar(
+        heightFactor: heightFactor,
+        label: e.label,
+        value: e.value,
+        isCurrentDate: e.isCurrentDate,
+        vertical: !isExpanded,
+      ));
     });
     return bars;
   }
