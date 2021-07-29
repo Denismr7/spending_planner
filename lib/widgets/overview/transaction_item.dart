@@ -52,13 +52,16 @@ class TransactionItem extends StatelessWidget {
         ),
         title: Text(
           transaction.description,
-          style: const TextStyle(fontWeight: FontWeight.bold),
+          style: Theme.of(context).textTheme.headline3,
         ),
-        subtitle: Text(DateFormat.MMMMEEEEd().format(transaction.date)),
+        subtitle: Text(
+          DateFormat.MMMMEEEEd().format(transaction.date),
+          style: Theme.of(context).textTheme.subtitle2,
+        ),
         trailing: Text(
           '$symbol ${transaction.amount.toStringAsFixed(2)} $currency',
           style: TextStyle(
-            color: isIncome ? Colors.green[800] : expenseColor,
+            color: isIncome ? Colors.white : expenseColor,
           ),
         ),
       ),
