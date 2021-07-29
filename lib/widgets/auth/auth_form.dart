@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:spending_planner/widgets/common/rounded_form_field.dart';
 
+import '../common/rounded_form_field.dart';
 import '../../models/rounded_buttons.dart';
 import '../common/rounded_button.dart';
 import '../../models/auth_field.dart';

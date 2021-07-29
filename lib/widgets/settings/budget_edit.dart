@@ -1,10 +1,13 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:spending_planner/models/budget.dart';
-import 'package:spending_planner/widgets/settings/setting_option.dart';
+import 'package:provider/provider.dart';
 
-// TODO: Save data (TEST)
+import '../../models/budget.dart';
+import '../../models/user.dart';
+import '../../providers/user.dart';
+import 'setting_option.dart';
+
 // TODO: Update budget when adding new income transaction if smartBudget is enabled
 
 class BudgetEdit extends StatefulWidget {
@@ -51,6 +54,8 @@ class _BudgetEditState extends State<BudgetEdit> {
 
   @override
   Widget build(BuildContext context) {
+    String currency = Provider.of<UserProvider>(context)
+        .getSettingValueAsString(Setting.Currency);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
@@ -101,6 +106,7 @@ class _BudgetEditState extends State<BudgetEdit> {
             simpleInput: true,
             initialValue: _budgetData?.percentage ?? 0,
             onChanged: (v) => _onChange('percentage', v),
+            unit: "%",
           ),
         if (!_budgetData!.smartBudget)
           SettingOption(
@@ -110,6 +116,7 @@ class _BudgetEditState extends State<BudgetEdit> {
             simpleInput: true,
             initialValue: _budgetData?.limit ?? 0,
             onChanged: (v) => _onChange('limit', v),
+            unit: currency,
           )
       ],
     );

@@ -4,6 +4,7 @@ import '../../models/user.dart';
 
 class SettingOption extends StatefulWidget {
   const SettingOption({
+    Key? key,
     required this.label,
     required this.icon,
     required this.simpleInput,
@@ -13,7 +14,7 @@ class SettingOption extends StatefulWidget {
     this.inputType,
     this.onTapDetail,
     this.detailIcon,
-    Key? key,
+    this.unit,
   }) : super(key: key);
 
   final String label;
@@ -25,6 +26,7 @@ class SettingOption extends StatefulWidget {
   final Setting? setting;
   final VoidCallback? onTapDetail;
   final IconData? detailIcon;
+  final String? unit;
 
   @override
   _SettingOptionState createState() => _SettingOptionState();
@@ -95,6 +97,25 @@ class _SettingOptionState extends State<SettingOption> {
     _controller.dispose();
   }
 
+  Widget _buildSimpleInput() {
+    return Row(
+      children: [
+        Container(
+          width: 80,
+          child: TextField(
+            controller: _controller,
+            onChanged: _onChanged,
+            keyboardType: widget.inputType,
+            decoration: InputDecoration(
+              errorText: _errorMessage,
+            ),
+          ),
+        ),
+        if (widget.unit != null) Text(widget.unit!),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -115,17 +136,7 @@ class _SettingOptionState extends State<SettingOption> {
           ],
         ),
         widget.simpleInput
-            ? Container(
-                width: 80,
-                child: TextField(
-                  controller: _controller,
-                  onChanged: _onChanged,
-                  keyboardType: widget.inputType,
-                  decoration: InputDecoration(
-                    errorText: _errorMessage,
-                  ),
-                ),
-              )
+            ? _buildSimpleInput()
             : IconButton(
                 onPressed: widget.onTapDetail,
                 icon: Icon(widget.detailIcon),

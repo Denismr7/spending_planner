@@ -3,10 +3,10 @@ import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:flutter/material.dart';
-import 'package:spending_planner/helpers/transactions.dart';
-import 'package:spending_planner/models/budget.dart';
-import 'package:spending_planner/models/category.dart';
 
+import '../helpers/transactions.dart';
+import '../models/budget.dart';
+import '../models/category.dart';
 import '../models/user.dart';
 
 class UserProvider extends ChangeNotifier {

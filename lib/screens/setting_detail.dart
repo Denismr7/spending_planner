@@ -2,9 +2,9 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:spending_planner/models/budget.dart';
-import 'package:spending_planner/widgets/settings/budget_edit.dart';
 
+import '../models/budget.dart';
+import '../widgets/settings/budget_edit.dart';
 import '../providers/user.dart';
 import '../widgets/settings/categories_edit.dart';
 import '../models/user.dart';
