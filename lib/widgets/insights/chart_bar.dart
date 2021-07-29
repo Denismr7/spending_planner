@@ -83,7 +83,7 @@ class ChartBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var currency = Provider.of<UserProvider>(context, listen: false)
-        .getSettingValue(Setting.Currency);
+        .getSettingValueAsString(Setting.Currency);
     return vertical ? buildVerticalBar() : buildHorizontalBar(currency);
   }
 }

@@ -1,8 +1,14 @@
+import 'dart:convert';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:flutter/material.dart';
 
+import '../helpers/transactions.dart';
+import '../models/budget.dart';
+import '../models/category.dart';
 import '../models/user.dart';
+import '../models/transaction.dart' as t;
 
 class UserProvider extends ChangeNotifier {
   User? _user;
@@ -17,13 +23,76 @@ class UserProvider extends ChangeNotifier {
     _user = User(id: id, login: email, name: name, settings: settings);
   }
 
-  String getSettingValue(Setting key) {
+  dynamic getSettingValue(Setting key) {
     return _user?.settings.firstWhere((setting) => setting.key == key).value ??
-        null;
+        "";
+  }
+
+  String getSettingValueAsString(Setting key) {
+    return getSettingValue(key).toString();
   }
 
   double getSettingValueAsDouble(Setting key) {
-    return double.parse(getSettingValue(key));
+    return double.parse(getSettingValueAsString(key));
+  }
+
+  Budget getBudget() {
+    var data = getSettingValue(Setting.Budget);
+    return Budget.fromJson(jsonDecode(data));
+  }
+
+  Future<double> calculateBudgetLimit(int newPercentage) async {
+    try {
+      var user = auth.FirebaseAuth.instance;
+      var currentDate = DateTime.now();
+      var startMonth = DateTime(currentDate.year, currentDate.month, 1);
+      var endMonth = DateTime(currentDate.year, currentDate.month + 1, 0);
+
+      var transactions = await TransactionsHelper.searchUserTransactions(
+        userId: user.currentUser!.uid,
+        from: startMonth,
+        to: endMonth,
+      );
+      var incomesAmount = 0.0;
+      transactions.forEach((element) {
+        if (element.categoryType == CategoryType.Incomes) {
+          incomesAmount += element.amount;
+        }
+      });
+
+      var budget = (incomesAmount * (newPercentage / 100)).toStringAsFixed(2);
+      print('SPLAN.UserProvider() SmartBudget enabled, new budget $budget');
+      return double.parse(budget);
+    } catch (e) {
+      print('SPLAN.UserProvider() Error $e');
+      throw e;
+    }
+  }
+
+  Future<void> updateBudgetLimit(t.Transaction transaction, bool isAdd) async {
+    if (transaction.categoryType == CategoryType.Expenses) return;
+    var now = DateTime.now();
+
+    if (transaction.date.year != now.year ||
+        transaction.date.month != now.month) return;
+
+    var budgetData = getBudget();
+    if (budgetData.smartBudget == false) return;
+
+    String amountToAdd = (transaction.amount * (budgetData.percentage! / 100))
+        .toStringAsFixed(2);
+    if (isAdd) {
+      budgetData.limit += double.parse(amountToAdd);
+    } else {
+      budgetData.limit -= double.parse(amountToAdd);
+    }
+
+    try {
+      await updateSettingValue({Setting.Budget: jsonEncode(budgetData)});
+      notifyListeners();
+    } catch (e) {
+      print('SPLAN.updateBudgetLimit() Error: ' + e.toString());
+    }
   }
 
   Future<void> updateSettingValue(Map<Setting, dynamic> newSettings) async {

@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:spending_planner/helpers/transactions.dart';
-import 'package:spending_planner/widgets/common/icon_option.dart';
+import 'package:provider/provider.dart';
+
+import '../../models/transaction.dart';
+import '../../providers/user.dart';
+import '../../helpers/transactions.dart';
+import '../common/icon_option.dart';
 
 class TransactionOptionsSheet extends StatefulWidget {
-  const TransactionOptionsSheet(this.transactionId);
+  const TransactionOptionsSheet(this.transaction);
 
-  final String transactionId;
+  final Transaction transaction;
 
   @override
   _TransactionOptionsSheetState createState() =>
@@ -19,11 +23,16 @@ class _TransactionOptionsSheetState extends State<TransactionOptionsSheet> {
     setState(() {
       _loading = true;
     });
-    await TransactionsHelper.deleteTransaction(widget.transactionId);
+
+    try {
+      await TransactionsHelper.deleteTransaction(widget.transaction.id);
+      Provider.of<UserProvider>(context, listen: false)
+          .updateBudgetLimit(widget.transaction, false);
+    } catch (e) {}
     setState(() {
       _loading = false;
     });
-    Navigator.of(context).pop(widget.transactionId);
+    Navigator.of(context).pop(widget.transaction.id);
   }
 
   @override

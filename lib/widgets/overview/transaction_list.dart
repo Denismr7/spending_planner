@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:spending_planner/models/transaction.dart';
 
+import '../../models/transaction.dart';
 import 'transaction_item.dart';
 
 class TransactionList extends StatelessWidget {
@@ -18,11 +18,7 @@ class TransactionList extends StatelessWidget {
             )
           : ListView.builder(
               itemBuilder: (ctx, index) => TransactionItem(
-                description: transactions[index].description,
-                date: transactions[index].date,
-                categoryType: transactions[index].categoryType,
-                amount: transactions[index].amount,
-                id: transactions[index].id,
+                transaction: transactions[index],
                 onLongPress: onLongPressItem,
               ),
               itemCount: transactions.length,

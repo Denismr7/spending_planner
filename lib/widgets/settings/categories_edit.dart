@@ -19,16 +19,6 @@ class CategoriesEdit extends StatefulWidget {
 class _CategoriesEditState extends State<CategoriesEdit> {
   List<Category> _categories = [];
 
-  List<Category> _parseJsonData(String jsonData) {
-    List<Category> parsedList = [];
-    List<dynamic> parsedJson = jsonDecode(jsonData);
-    parsedJson.forEach((element) {
-      parsedList.add(Category.fromJson(element));
-    });
-
-    return parsedList;
-  }
-
   void _showEditCategoryMBS(Category? selectedCategory) async {
     var catIndex = _categories
         .indexWhere((category) => category.id == selectedCategory?.id);
@@ -84,7 +74,7 @@ class _CategoriesEditState extends State<CategoriesEdit> {
   @override
   void initState() {
     super.initState();
-    _categories = _parseJsonData(widget.jsonData);
+    _categories = Category.parseJsonCategories(widget.jsonData);
   }
 
   List<Widget> _buildCategoryItems(List<Category> items) {
