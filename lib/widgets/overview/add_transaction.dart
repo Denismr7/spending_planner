@@ -67,19 +67,27 @@ class _AddTransactionState extends State<AddTransaction> {
     if (_formData['Date'] == null) return;
 
     final user = FirebaseAuth.instance;
-    final transaction = await TransactionsHelper.addTransaction(
-      double.parse(_formData['Amount']),
-      user.currentUser!.uid,
-      _formData['Category'],
-      _formData['CategoryType'],
-      _formData['Date'],
-      _formData['Description'],
-    );
 
-    setState(() {
-      _loading = false;
-    });
-    Navigator.of(context).pop(transaction);
+    try {
+      final transaction = await TransactionsHelper.addTransaction(
+        double.parse(_formData['Amount']),
+        user.currentUser!.uid,
+        _formData['Category'],
+        _formData['CategoryType'],
+        _formData['Date'],
+        _formData['Description'],
+      );
+
+      Provider.of<UserProvider>(context, listen: false)
+          .updateBudgetLimit(transaction, true);
+      setState(() {
+        _loading = false;
+      });
+      Navigator.of(context).pop(transaction);
+    } catch (e) {
+      print('SPLAN.AddTansactionWidget() Error: ' + e.toString());
+      throw e;
+    }
   }
 
   @override

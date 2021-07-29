@@ -8,8 +8,6 @@ import '../../models/user.dart';
 import '../../providers/user.dart';
 import 'setting_option.dart';
 
-// TODO: Update budget when adding new income transaction if smartBudget is enabled
-
 class BudgetEdit extends StatefulWidget {
   const BudgetEdit(this.jsonData, {required this.onChange});
 

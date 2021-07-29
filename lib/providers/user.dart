@@ -8,6 +8,7 @@ import '../helpers/transactions.dart';
 import '../models/budget.dart';
 import '../models/category.dart';
 import '../models/user.dart';
+import '../models/transaction.dart' as t;
 
 class UserProvider extends ChangeNotifier {
   User? _user;
@@ -65,6 +66,32 @@ class UserProvider extends ChangeNotifier {
     } catch (e) {
       print('SPLAN.UserProvider() Error $e');
       throw e;
+    }
+  }
+
+  Future<void> updateBudgetLimit(t.Transaction transaction, bool isAdd) async {
+    if (transaction.categoryType == CategoryType.Expenses) return;
+    var now = DateTime.now();
+
+    if (transaction.date.year != now.year ||
+        transaction.date.month != now.month) return;
+
+    var budgetData = getBudget();
+    if (budgetData.smartBudget == false) return;
+
+    String amountToAdd = (transaction.amount * (budgetData.percentage! / 100))
+        .toStringAsFixed(2);
+    if (isAdd) {
+      budgetData.limit += double.parse(amountToAdd);
+    } else {
+      budgetData.limit -= double.parse(amountToAdd);
+    }
+
+    try {
+      await updateSettingValue({Setting.Budget: jsonEncode(budgetData)});
+      notifyListeners();
+    } catch (e) {
+      print('SPLAN.updateBudgetLimit() Error: ' + e.toString());
     }
   }
 

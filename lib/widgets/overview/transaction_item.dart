@@ -2,26 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
+import '../../models/transaction.dart';
 import '../../models/category.dart';
 import '../../models/user.dart';
 import '../../providers/user.dart';
 import 'transaction_options_sheet.dart';
 
 class TransactionItem extends StatelessWidget {
-  final String description;
-  final DateTime date;
-  final CategoryType categoryType;
-  final double amount;
-  final String id;
+  final Transaction transaction;
   final VoidCallback onLongPress;
 
   TransactionItem({
     Key? key,
-    required this.description,
-    required this.date,
-    required this.categoryType,
-    required this.amount,
-    required this.id,
+    required this.transaction,
     required this.onLongPress,
   }) : super(key: key);
 
@@ -29,7 +22,8 @@ class TransactionItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var isIncome = categoryType == CategoryType.Incomes ? true : false;
+    var isIncome =
+        transaction.categoryType == CategoryType.Incomes ? true : false;
     var symbol = isIncome ? "+" : "-";
     final currency = Provider.of<UserProvider>(context)
         .getSettingValueAsString(Setting.Currency);
@@ -42,7 +36,7 @@ class TransactionItem extends StatelessWidget {
             ),
           ),
           context: context,
-          builder: (ctx) => TransactionOptionsSheet(id),
+          builder: (ctx) => TransactionOptionsSheet(transaction),
         ).then((value) {
           if (value == null) return;
           onLongPress();
@@ -57,12 +51,12 @@ class TransactionItem extends StatelessWidget {
           ),
         ),
         title: Text(
-          description,
+          transaction.description,
           style: const TextStyle(fontWeight: FontWeight.bold),
         ),
-        subtitle: Text(DateFormat.MMMMEEEEd().format(date)),
+        subtitle: Text(DateFormat.MMMMEEEEd().format(transaction.date)),
         trailing: Text(
-          '$symbol ${amount.toStringAsFixed(2)} $currency',
+          '$symbol ${transaction.amount.toStringAsFixed(2)} $currency',
           style: TextStyle(
             color: isIncome ? Colors.green[800] : expenseColor,
           ),
