@@ -1,6 +1,12 @@
+import 'dart:convert';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
+import '../mock.dart';
+import '../models/budget.dart';
+import '../models/category.dart';
 import '../widgets/auth/auth_form.dart';
 import '../models/auth_field.dart';
 
@@ -40,6 +46,20 @@ class _AuthScreenState extends State<AuthScreen> {
         email: email,
         password: password,
       );
+
+      // Set default values
+      var firebase = FirebaseFirestore.instance;
+      Budget defaultBudget = Budget(smartBudget: false, limit: 100);
+      List<Category> categories = categoriesMock;
+      var currency = "€";
+
+      await firebase.collection('users').doc(userCredential.user!.uid).set({
+        'budget': jsonEncode(defaultBudget),
+        'categories': jsonEncode(categories),
+        'currency': currency,
+        'email': email,
+      });
+
       return userCredential;
     } on FirebaseAuthException catch (e) {
       var message = "An error ocurred";

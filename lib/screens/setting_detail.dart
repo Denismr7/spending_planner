@@ -91,7 +91,7 @@ class _SettingDetailScreenState extends State<SettingDetailScreen> {
         ],
       ),
       body: Padding(
-        padding: const EdgeInsets.all(10.0),
+        padding: const EdgeInsets.all(15.0),
         child: _buildEditor(),
       ),
     );

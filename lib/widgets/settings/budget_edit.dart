@@ -81,7 +81,7 @@ class _BudgetEditState extends State<BudgetEdit> {
                     const Text(
                       'Set a percentage of your income as a budget',
                       style: const TextStyle(
-                        fontSize: 13,
+                        fontSize: 10,
                         fontWeight: FontWeight.w400,
                       ),
                     ),
