@@ -108,8 +108,8 @@ class Bar extends StatelessWidget {
         widthFactor: !isVertical ? heightFactor : null,
         alignment: Alignment.bottomLeft,
         child: Container(
-          width: isVertical ? 15 : null,
-          height: !isVertical ? 20 : null,
+          width: isVertical ? 12 : null,
+          height: !isVertical ? 16 : null,
           decoration: BoxDecoration(
             borderRadius: const BorderRadius.all(
               const Radius.circular(40),

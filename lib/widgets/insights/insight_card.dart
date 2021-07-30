@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import 'insight_card_growth_text.dart';
+import 'insight_card_title.dart';
 import '../../models/user.dart';
 import '../../providers/user.dart';
 import '../../models/bar_chart_insights_data.dart';
 import 'bar_chart_card.dart';
+import 'insight_card_subtitle.dart';
 
 class InsightCard extends StatefulWidget {
   const InsightCard({
@@ -32,29 +35,19 @@ class _InsightCardState extends State<InsightCard> {
   var _expanded = false;
   String? _barDetailText;
 
-  Widget _buildGrowthText(String? barDetailText, String? growthText) {
+  void _handleExpand() {
+    setState(() {
+      _expanded = !_expanded;
+    });
+  }
+
+  Widget _handleGrowthTextVisibility(
+      String? barDetailText, String? growthText) {
     if (growthText == null) return const SizedBox();
     if (barDetailText != null) return const SizedBox(height: 22);
 
-    return Row(
-      children: [
-        Icon(
-          widget.growth! < 0
-              ? Icons.arrow_drop_down_rounded
-              : Icons.arrow_drop_up_rounded,
-          size: 22,
-          color: widget.growth! < 0 ? Colors.red : Colors.white,
-        ),
-        Text(
-          widget.growthText!,
-          style: const TextStyle(
-            fontSize: 13,
-            fontWeight: FontWeight.w300,
-            color: Colors.white,
-          ),
-        ),
-      ],
-    );
+    return InsightCardGrowthText(
+        growth: widget.growth!, growthText: widget.growthText!);
   }
 
   @override
@@ -95,48 +88,15 @@ class _InsightCardState extends State<InsightCard> {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      widget.title,
-                      style: const TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.w600,
-                        color: Colors.white,
-                      ),
-                    ),
-                    if (widget.isExpandable)
-                      GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            _expanded = !_expanded;
-                          });
-                        },
-                        child: Icon(
-                          _expanded ? Icons.arrow_drop_down : Icons.arrow_right,
-                          size: 35,
-                          color: Colors.white,
-                        ),
-                      ),
-                  ],
+                InsightCardTitle(
+                  title: widget.title,
+                  isExpandable: widget.isExpandable,
+                  isExpanded: _expanded,
+                  onTapExpand: _handleExpand,
                 ),
                 if (widget.subtitle != null || _barDetailText != null)
-                  Container(
-                    margin: const EdgeInsets.symmetric(vertical: 3),
-                    child: Text(
-                      _barDetailText != null
-                          ? _barDetailText!
-                          : widget.subtitle!,
-                      style: const TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w300,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-                _buildGrowthText(_barDetailText, widget.growthText),
+                  InsightCardSubtitle(text: _barDetailText ?? widget.subtitle!),
+                _handleGrowthTextVisibility(_barDetailText, widget.growthText),
               ],
             ),
             const SizedBox(height: 10),

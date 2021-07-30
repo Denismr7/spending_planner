@@ -35,12 +35,15 @@ class BarChartCard extends StatelessWidget {
         GestureDetector(
           onLongPress: isExpanded ? null : () => onLongPress(e.label, e.value),
           onLongPressEnd: isExpanded ? null : (_) => onLongPress(null, null),
-          child: ChartBar(
-            heightFactor: heightFactor,
-            label: e.label,
-            value: e.value,
-            isCurrentDate: e.isCurrentDate,
-            vertical: !isExpanded,
+          child: Padding(
+            padding: EdgeInsets.symmetric(vertical: isExpanded ? 5 : 0.0),
+            child: ChartBar(
+              heightFactor: heightFactor,
+              label: e.label,
+              value: e.value,
+              isCurrentDate: e.isCurrentDate,
+              vertical: !isExpanded,
+            ),
           ),
         ),
       );
