@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 import '../../models/budget.dart';
@@ -105,6 +106,7 @@ class _BudgetEditState extends State<BudgetEdit> {
             initialValue: _budgetData?.percentage ?? 0,
             onChanged: (v) => _onChange('percentage', v),
             unit: "%",
+            inputType: TextInputType.number,
           ),
         if (!_budgetData!.smartBudget)
           SettingOption(
@@ -115,6 +117,7 @@ class _BudgetEditState extends State<BudgetEdit> {
             initialValue: _budgetData?.limit ?? 0,
             onChanged: (v) => _onChange('limit', v),
             unit: currency,
+            inputType: TextInputType.numberWithOptions(decimal: true),
           )
       ],
     );

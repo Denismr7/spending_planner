@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import '../../models/user.dart';
 
@@ -106,6 +107,9 @@ class _SettingOptionState extends State<SettingOption> {
             controller: _controller,
             onChanged: _onChanged,
             keyboardType: widget.inputType,
+            inputFormatters: widget.inputType == TextInputType.number
+                ? [FilteringTextInputFormatter.digitsOnly]
+                : null,
             decoration: InputDecoration(
               errorText: _errorMessage,
             ),
