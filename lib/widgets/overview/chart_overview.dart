@@ -6,6 +6,7 @@ import '../../models/transaction.dart';
 import '../../providers/user.dart';
 import 'horizontal_budget_chart.dart';
 import '../../models/user.dart';
+import 'horizontal_budget_chart_title.dart';
 
 class ChartOverview extends StatelessWidget {
   final List<Transaction> monthTransactions;
@@ -37,13 +38,10 @@ class ChartOverview extends StatelessWidget {
       padding: const EdgeInsets.all(8.0),
       child: Column(
         children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 5),
-            child: const Text(
-              'Month overview',
-              textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w300),
-            ),
+          HorizontalBudgetChartTitle(
+            totalSpending: totalSpending,
+            budgetLimit: budget.limit,
+            currency: currency,
           ),
           HorizontalBudgetChart(
             barChartHeight: barChartHeight,

@@ -115,6 +115,10 @@ class _MyAppState extends State<MyApp> {
                       fontSize: 18,
                       color: Colors.black,
                     ),
+                    headline4: const TextStyle(
+                      fontSize: 16,
+                      color: Colors.black,
+                    ),
                     subtitle2: const TextStyle(
                       fontSize: 12,
                       fontWeight: FontWeight.normal,
