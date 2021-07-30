@@ -61,7 +61,7 @@ class TransactionItem extends StatelessWidget {
         trailing: Text(
           '$symbol ${transaction.amount.toStringAsFixed(2)} $currency',
           style: TextStyle(
-            color: isIncome ? Colors.white : expenseColor,
+            color: isIncome ? Colors.green[800] : expenseColor,
           ),
         ),
       ),
