@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
+import '../../models/user.dart';
+import '../../providers/user.dart';
 import '../../models/bar_chart_insights_data.dart';
 import 'bar_chart_card.dart';
 
@@ -27,9 +30,52 @@ class InsightCard extends StatefulWidget {
 
 class _InsightCardState extends State<InsightCard> {
   var _expanded = false;
+  String? _barDetailText;
+
+  Widget _buildGrowthText(String? barDetailText, String? growthText) {
+    if (growthText == null) return const SizedBox();
+    if (barDetailText != null) return const SizedBox(height: 22);
+
+    return Row(
+      children: [
+        Icon(
+          widget.growth! < 0
+              ? Icons.arrow_drop_down_rounded
+              : Icons.arrow_drop_up_rounded,
+          size: 22,
+          color: widget.growth! < 0 ? Colors.red : Colors.white,
+        ),
+        Text(
+          widget.growthText!,
+          style: const TextStyle(
+            fontSize: 13,
+            fontWeight: FontWeight.w300,
+            color: Colors.white,
+          ),
+        ),
+      ],
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
+    var currency = Provider.of<UserProvider>(context, listen: false)
+        .getSettingValueAsString(Setting.Currency);
+
+    void _handleLongPress(String? label, double? value) {
+      String? text;
+      if (label == null || value == null) {
+        // Clear detail text to show subtitle
+        text = null;
+      } else {
+        text = '$label: ${value.toStringAsFixed(2)} $currency';
+      }
+
+      setState(() {
+        _barDetailText = text;
+      });
+    }
+
     return Container(
       height: _expanded ? 400 : 240,
       width: 350,
@@ -76,11 +122,13 @@ class _InsightCardState extends State<InsightCard> {
                       ),
                   ],
                 ),
-                if (widget.subtitle != null)
+                if (widget.subtitle != null || _barDetailText != null)
                   Container(
-                    margin: const EdgeInsets.only(bottom: 3),
+                    margin: const EdgeInsets.symmetric(vertical: 3),
                     child: Text(
-                      widget.subtitle!,
+                      _barDetailText != null
+                          ? _barDetailText!
+                          : widget.subtitle!,
                       style: const TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.w300,
@@ -88,26 +136,7 @@ class _InsightCardState extends State<InsightCard> {
                       ),
                     ),
                   ),
-                if (widget.growth != null)
-                  Row(
-                    children: [
-                      Icon(
-                        widget.growth! < 0
-                            ? Icons.arrow_drop_down_rounded
-                            : Icons.arrow_drop_up_rounded,
-                        size: 22,
-                        color: widget.growth! < 0 ? Colors.red : Colors.white,
-                      ),
-                      Text(
-                        widget.growthText!,
-                        style: const TextStyle(
-                          fontSize: 13,
-                          fontWeight: FontWeight.w300,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ],
-                  ),
+                _buildGrowthText(_barDetailText, widget.growthText),
               ],
             ),
             const SizedBox(height: 10),
@@ -115,6 +144,7 @@ class _InsightCardState extends State<InsightCard> {
               child: BarChartCard(
                 data: widget.chartData,
                 expanded: _expanded,
+                onLongPress: _handleLongPress,
               ),
             ),
           ],

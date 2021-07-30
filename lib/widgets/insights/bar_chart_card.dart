@@ -8,10 +8,12 @@ class BarChartCard extends StatelessWidget {
     Key? key,
     required this.data,
     required this.expanded,
+    required this.onLongPress,
   }) : super(key: key);
 
   final List<BarChartInsightsData> data;
   final bool expanded;
+  final Function(String? label, double? value) onLongPress;
 
   double calculateHeightFactor(double currentValue) {
     if (currentValue == 0) return currentValue;
@@ -29,13 +31,19 @@ class BarChartCard extends StatelessWidget {
     List<Widget> bars = [];
     data.forEach((e) {
       var heightFactor = calculateHeightFactor(e.value);
-      bars.add(ChartBar(
-        heightFactor: heightFactor,
-        label: e.label,
-        value: e.value,
-        isCurrentDate: e.isCurrentDate,
-        vertical: !isExpanded,
-      ));
+      bars.add(
+        GestureDetector(
+          onLongPress: isExpanded ? null : () => onLongPress(e.label, e.value),
+          onLongPressEnd: isExpanded ? null : (_) => onLongPress(null, null),
+          child: ChartBar(
+            heightFactor: heightFactor,
+            label: e.label,
+            value: e.value,
+            isCurrentDate: e.isCurrentDate,
+            vertical: !isExpanded,
+          ),
+        ),
+      );
     });
     return bars;
   }
