@@ -31,6 +31,5 @@ class InsightCardGrowthText extends StatelessWidget {
         ),
       ],
     );
-    ;
   }
 }
