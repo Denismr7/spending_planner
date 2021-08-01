@@ -79,7 +79,7 @@ class _AddTransactionState extends State<AddTransaction> {
       );
 
       Provider.of<UserProvider>(context, listen: false)
-          .updateBudgetLimit(transaction, true);
+          .updateBudgetLimit(transaction);
       setState(() {
         _loading = false;
       });

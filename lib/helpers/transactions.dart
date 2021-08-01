@@ -13,7 +13,7 @@ class TransactionsHelper {
     FirebaseFirestore firestore = FirebaseFirestore.instance;
 
     try {
-      // Fetch de collection
+      // Fetch the collection
       var query = firestore
           .collection('transactions')
           .where('userId', isEqualTo: userId)
@@ -53,6 +53,25 @@ class TransactionsHelper {
       print('Error fetching transactions: ');
       print(e.toString());
       return [];
+    }
+  }
+
+  static Future<List<m.Transaction>> getTransactionsByMonth(
+    String userId,
+    int month,
+    int year,
+  ) async {
+    var start = DateTime(year, month, 1);
+    var end = DateTime(year, month + 1, 0);
+    try {
+      var transactions = await TransactionsHelper.searchUserTransactions(
+        userId: userId,
+        from: start,
+        to: end,
+      );
+      return transactions;
+    } catch (e) {
+      throw e;
     }
   }
 

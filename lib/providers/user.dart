@@ -45,13 +45,11 @@ class UserProvider extends ChangeNotifier {
     try {
       var user = auth.FirebaseAuth.instance;
       var currentDate = DateTime.now();
-      var startMonth = DateTime(currentDate.year, currentDate.month, 1);
-      var endMonth = DateTime(currentDate.year, currentDate.month + 1, 0);
 
-      var transactions = await TransactionsHelper.searchUserTransactions(
-        userId: user.currentUser!.uid,
-        from: startMonth,
-        to: endMonth,
+      var transactions = await TransactionsHelper.getTransactionsByMonth(
+        user.currentUser!.uid,
+        currentDate.month,
+        currentDate.year,
       );
       var incomesAmount = 0.0;
       transactions.forEach((element) {
@@ -69,7 +67,7 @@ class UserProvider extends ChangeNotifier {
     }
   }
 
-  Future<void> updateBudgetLimit(t.Transaction transaction, bool isAdd) async {
+  Future<void> updateBudgetLimit(t.Transaction transaction) async {
     if (transaction.categoryType == CategoryType.Expenses) return;
     var now = DateTime.now();
 
@@ -79,14 +77,7 @@ class UserProvider extends ChangeNotifier {
     var budgetData = getBudget();
     if (budgetData.smartBudget == false) return;
 
-    String amountToAdd = (transaction.amount * (budgetData.percentage! / 100))
-        .toStringAsFixed(2);
-    if (isAdd) {
-      budgetData.limit += double.parse(amountToAdd);
-    } else {
-      budgetData.limit -= double.parse(amountToAdd);
-    }
-
+    budgetData.limit = await calculateBudgetLimit(budgetData.percentage!);
     try {
       await updateSettingValue({Setting.Budget: jsonEncode(budgetData)});
       notifyListeners();

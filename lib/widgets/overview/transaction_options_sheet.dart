@@ -27,7 +27,7 @@ class _TransactionOptionsSheetState extends State<TransactionOptionsSheet> {
     try {
       await TransactionsHelper.deleteTransaction(widget.transaction.id);
       Provider.of<UserProvider>(context, listen: false)
-          .updateBudgetLimit(widget.transaction, false);
+          .updateBudgetLimit(widget.transaction);
     } catch (e) {}
     setState(() {
       _loading = false;
