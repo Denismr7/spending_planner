@@ -117,4 +117,23 @@ class TransactionsHelper {
       throw e;
     }
   }
+
+  static Future<double> getExpensesByMonth(
+    String userId,
+    int year,
+    int month,
+  ) async {
+    Iterable<m.Transaction> monthTransactions =
+        (await getTransactionsByMonth(userId, month, year))
+            .where((element) => element.categoryType == CategoryType.Expenses);
+
+    double expenses = 0.0;
+    if (monthTransactions.length > 0) {
+      monthTransactions.forEach((element) {
+        expenses += element.amount;
+      });
+    }
+
+    return expenses;
+  }
 }

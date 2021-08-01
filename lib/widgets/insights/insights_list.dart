@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:spending_planner/helpers/utils.dart';
 
 import '../../helpers/transactions.dart';
 import '../../models/bar_chart_insights_data.dart';
@@ -48,7 +49,7 @@ class _InsightsListState extends State<InsightsList> {
     _yearTransactions = transactions.reversed.toList();
   }
 
-  void _calculateYearSpendingInMonths() {
+  Future<void> _calculateYearSpendingInMonths() async {
     var yearExpenses = _yearTransactions
         .where((element) => element.categoryType == CategoryType.Expenses);
 
@@ -62,7 +63,7 @@ class _InsightsListState extends State<InsightsList> {
 
       // Current month charts data
       if (i == _currentDate.month) {
-        _calculateMonthSpending(monthExpenses);
+        await _calculateMonthSpending(monthExpenses);
         _calculateTopCategories(monthExpenses);
         var prevMonthExpenses = 0.0;
         yearExpenses
@@ -137,7 +138,8 @@ class _InsightsListState extends State<InsightsList> {
     _categoriesSpending.sort((a, b) => b.value.compareTo(a.value));
   }
 
-  void _calculateMonthSpending(List<Transaction> monthTransactions) {
+  Future<void> _calculateMonthSpending(
+      List<Transaction> monthTransactions) async {
     Map<String, double> valuesInWeeks =
         _splitMonthInWeeksWithAmounts(monthTransactions);
 
@@ -164,8 +166,9 @@ class _InsightsListState extends State<InsightsList> {
         _calculateWeekGrowth(value, valuesInWeeks[prevWeekKey] ?? 0);
       }
     });
-    _estimatedMonthExpense =
-        valuesInWeeks.keys.length > 0 ? _calculateMonthEstimate(monthTotal) : 0;
+    _estimatedMonthExpense = valuesInWeeks.keys.length > 0
+        ? await UtilsHelper.calculateMonthEstimate(_currentDate, monthTotal)
+        : 0;
   }
 
   void _calculateWeekGrowth(double currentWeek, double prevWeek) {
@@ -184,13 +187,6 @@ class _InsightsListState extends State<InsightsList> {
     int currentWeek = (_currentDate.day / 7).round();
     currentWeek = currentWeek > totalWeeks ? currentWeek-- : currentWeek;
     return currentWeek == week;
-  }
-
-  double _calculateMonthEstimate(double monthTotalExpenses) {
-    double expensePerDay = monthTotalExpenses / _currentDate.day;
-    int daysInMonth =
-        DateTime(_currentDate.year, _currentDate.month + 1, 0).day;
-    return expensePerDay * daysInMonth;
   }
 
   Map<String, double> _splitMonthInWeeksWithAmounts(
@@ -240,8 +236,8 @@ class _InsightsListState extends State<InsightsList> {
   @override
   void initState() {
     super.initState();
-    _fetchYearTransactions().then((_) {
-      _calculateYearSpendingInMonths();
+    _fetchYearTransactions().then((_) async {
+      await _calculateYearSpendingInMonths();
 
       // Reload widget once finished
       setState(() {});
