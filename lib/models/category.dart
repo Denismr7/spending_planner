@@ -1,4 +1,5 @@
 import 'dart:convert';
+import '../extensions.dart';
 
 class Category {
   final String id;
@@ -49,9 +50,3 @@ class Category {
 }
 
 enum CategoryType { Incomes, Expenses }
-
-extension ParseToString on CategoryType {
-  String valueAsString() {
-    return this.toString().substring(this.toString().indexOf('.') + 1);
-  }
-}

@@ -9,6 +9,7 @@ import '../models/budget.dart';
 import '../models/category.dart';
 import '../models/user.dart';
 import '../models/transaction.dart' as t;
+import '../extensions.dart';
 
 class UserProvider extends ChangeNotifier {
   User? _user;

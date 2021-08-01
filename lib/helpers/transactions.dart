@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 import '../models/category.dart';
 import '../models/transaction.dart' as m;
+import '../extensions.dart';
 
 class TransactionsHelper {
   static Future<List<m.Transaction>> searchUserTransactions({

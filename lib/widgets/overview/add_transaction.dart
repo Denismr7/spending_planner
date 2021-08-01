@@ -9,6 +9,7 @@ import '../common/select_field.dart';
 import '../../models/category.dart';
 import '../../providers/user.dart';
 import '../../models/user.dart';
+import '../../extensions.dart';
 
 class AddTransaction extends StatefulWidget {
   const AddTransaction();
@@ -69,12 +70,19 @@ class _AddTransactionState extends State<AddTransaction> {
     final user = FirebaseAuth.instance;
 
     try {
+      DateTime pickedDate = _formData['Date'];
+      DateTime transactionDate = pickedDate;
+      var today = DateTime.now();
+      if (pickedDate.isSameDate(today)) {
+        // Save time in order to sort transactions correctly
+        transactionDate = today;
+      }
       final transaction = await TransactionsHelper.addTransaction(
         double.parse(_formData['Amount']),
         user.currentUser!.uid,
         _formData['Category'],
         _formData['CategoryType'],
-        _formData['Date'],
+        transactionDate,
         _formData['Description'],
       );
 

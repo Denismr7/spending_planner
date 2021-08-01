@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../common/modal_bottom_sheet_input.dart';
 import '../../models/category.dart';
 import '../common/select_field.dart';
+import '../../extensions.dart';
 
 class EditCategoryForm extends StatefulWidget {
   const EditCategoryForm({required this.initialValue});

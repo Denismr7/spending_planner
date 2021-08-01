@@ -8,6 +8,7 @@ import '../widgets/settings/budget_edit.dart';
 import '../providers/user.dart';
 import '../widgets/settings/categories_edit.dart';
 import '../models/user.dart';
+import '../extensions.dart';
 
 class SettingDetailScreen extends StatefulWidget {
   static const routeName = '/setting-detail';
